@@ -1,0 +1,26 @@
+id: default
+groups: {}
+comments: []
+routes:
+  - id: VtGeF9
+    name: PAN (traffic and threat)
+    final: true
+    disabled: false
+    pipeline: Network_Activity_4001-DEMO
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: sourcetype=='pan:traffic' || sourcetype=='pan:threat'
+    output: default
+  - id: default
+    name: default
+    final: true
+    disabled: false
+    pipeline: main
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    output: default

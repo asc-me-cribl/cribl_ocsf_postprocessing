@@ -1,0 +1,1154 @@
+output: default
+streamtags:
+  - OCSF
+groups:
+  WInbwq:
+    name: "EDIT ME: Event Classification"
+    description: enter values for each unique event type processed
+    index: 3
+  M1q7Hp:
+    name: "EDIT ME: [REQ] Field mapping"
+    description: use this group to rename required fields to their OCSF keys
+    index: 4
+    disabled: false
+  A3Hryd:
+    name: "EDIT ME: [REC] Field mapping"
+    description: use this group to rename recommended fields to their OCSF keys
+    index: 5
+    disabled: true
+  qBgPgc:
+    name: "EDIT ME: [OPT] Field mapping"
+    description: use this group to rename fields to their OCSF keys
+    disabled: true
+    index: 6
+  u6rXXF:
+    name: Calculated fields
+    description: adds calculated fields, preps data for sending
+    index: 9
+  O5EGFF:
+    name: "EDIT ME: Add Event Profiles (WIP)"
+    disabled: true
+    description: adds extra fields for mapping depending on the selected profile
+    index: 10
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "Note: OCSF is a very verbose mapping schema and can quickly expand the
+        volume of data that is being written out. because of this a compressed
+        output format is recommended (ie parquet) in order to reduce size on
+        disk."
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: 'This pipeline maps "HTTP Activity" data to OCSF as defined in:
+        https://schema.ocsf.io/classes/http_activity?extensions='
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the following groups starting with "EDIT ME:" are where your input is
+        needed to map the original event fields to the OCSF naming convention
+        and structure. there are comments to help with completing each function.
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "Instructions: copy the below eval function and duplicate it for each
+        unique event type that will be processed by this pipeline. any events
+        that do no have a value assigned in this group will be marked as
+        'unknown' at the end of the pipeline."
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        How to determine the values for the eval fields. for ref:
+        https://schema.ocsf.io/classes/network_activity?extensions=
+
+
+        activity [REQ]- the original activity that triggered the event _ ie. 'firewall accept'
+
+        activity_id [REQ]- a numeric identifier for the type of event, see key at the above link
+
+        severity [REQ]- the original event severity measuring the effort and expense required to resolve
+
+        severity_id [REQ]- a numeric identifier for the severity of the event, see key at the above link
+
+        status [REC]- 
+
+        status_id [REC]- 
+
+        status_code [OPT]- 
+
+        status_detail [OPT]- 
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Accepted values for: activity_id
+
+        -1	Other	        The event activity is not mapped
+
+        0	Unknown	        The event activity is unknown
+
+        1	Established	A new network connection was established
+
+        2	Closed	        The connection was closed
+
+        3	Reset	        The connection was abnormally terminated or closed by a middle device
+
+        4	Failed	        The connection failed
+
+        5	Refused	        The connection was refused
+
+        6	Traffic	        Network traffic report
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Accepted values for: severity_id
+
+        -1	Other	       The event severity is not mapped
+
+        0	Unknown	       The event severity is not known
+
+        1	Informational  Informational message. No action required
+
+        2	Low	       The user decides if action is needed
+
+        3	Medium	       Action is required but the situation is not serious at this time
+
+        4	High	       Action is required immediately
+
+        5	Critical       Action is required immediately and the scope is broad
+
+        6	Fatal	       An error occurred but it is too late to take remedial action
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Accepted values for: status_id
+        -1	Other	The event status is not mapped
+        0	Unknown	
+        1	Success	
+        2	Failure
+    groupId: WInbwq
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: activity
+          value: "''"
+        - name: activity_id
+          value: "0"
+        - name: severity
+          value: "''"
+        - name: severity_id
+          value: "0"
+        - name: status
+          value: "''"
+        - name: status_id
+          value: "0"
+        - name: status_code
+          value: "''"
+        - name: status_detail
+          value: "''"
+        - name: version
+          value: "'0.18.0'"
+    description: Classification fields for {given event type}
+    groupId: WInbwq
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: dst_endpoint
+          value: "''"
+        - value: "(metadata || {product: '', version: ''})"
+          name: metadata
+        - name: metadata.product
+          value: "(metadata.product || {name: '', vendor_name: ''})"
+        - name: src_endpoint
+          value: "''"
+        - name: http_request
+          value: "''"
+        - name: http_response
+          value: "''"
+    description: "Build: [REQ] fields and array structures (DONT TOUCH)"
+    groupId: M1q7Hp
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/metadata
+    groupId: M1q7Hp
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: __e.metadata.product.name
+          value: "''"
+        - name: __e.metadata.product.vendor_name
+          value: "''"
+        - value: "'0.20.0'"
+          name: __e.metadata.version
+    description: Assign recommended metadata fields
+    groupId: M1q7Hp
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - value: "(connection_info || {direction: '', direction_id: '', protocol_num:
+            ''})"
+          name: connection_info
+        - name: dst_endpoint
+          value: "(dst_endpoint || {hostname: '', ip: '', instance_uid: '', interface_uid:
+            '', port: '', svc_name: '', uid: ''})"
+        - name: src_endpoint
+          value: "(src_endpoint || {hostname: '', ip: '', instance_uid: '', interface_uid:
+            '', port: '', svc_name: '', uid: ''})"
+        - name: metadata.product
+          value: "Object.assign(metadata.product, {lang: '', uid: '', version: ''})"
+        - name: http_request
+          value: "(http_request || {http_headers: '', http_method: '', user_agent: '',
+            version: '', url: ''})"
+        - name: http_request.http_headers
+          value: "(http_request.header || {name: '', value: ''})"
+        - name: http_request.url
+          value: "(http_request.url || {query_string: '', hostname: '', path: '', port:
+            '', scheme: '', text: '', categories: '', category_ids: ''})"
+        - name: http_repsonse
+          value: "(http_response || {code: ''})"
+    groupId: A3Hryd
+    description: "Build: [REC] fields and array structure (DONT TOUCH)"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_connection_info
+    groupId: A3Hryd
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.connection_info.direction
+          value: "''"
+        - name: __e.connection_info.direction_id
+          value: "0"
+        - name: __e.connection_info.protocol_num
+          value: "0"
+    groupId: A3Hryd
+    description: Assign recommended connection_info fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_endpoint
+    groupId: A3Hryd
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.dst_endpoint.uid
+          value: "''"
+        - name: __e.dst_endpoint.hostname
+          value: "''"
+        - name: __e.dst_endpoint.ip
+          value: "''"
+        - name: __e.dst_endpoint.instance_uid
+          value: "''"
+        - name: __e.dst_endpoint.interface_uid
+          value: "''"
+        - name: __e.dst_endpoint.port
+          value: "0"
+        - name: __e.dst_endpoint.svc_name
+          value: "''"
+    groupId: A3Hryd
+    description: Assign recommended dst_endpoint fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_endpoint
+    groupId: A3Hryd
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.src_endpoint.uid
+          value: "''"
+        - name: __e.src_endpoint.hostname
+          value: "''"
+        - name: __e.src_endpoint.ip
+          value: "''"
+        - name: __e.src_endpoint.instance_uid
+          value: "''"
+        - name: __e.src_endpoint.interface_uid
+          value: "''"
+        - name: __e.src_endpoint.port
+          value: "0"
+        - name: __e.src_endpoint.svc_name
+          value: "''"
+    groupId: A3Hryd
+    description: Assign recommended src_endpoint fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/http_request
+    groupId: A3Hryd
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.http_request.http_headers.name
+          value: "''"
+        - name: __e.http_request.http_headers.value
+          value: "''"
+        - name: __e.http_request.http_method
+          value: "''"
+        - name: __e.http_request.user_agent
+          value: "''"
+        - name: __e.http_request.version
+          value: "''"
+        - name: __e.http_request.url.query_string
+          value: "''"
+        - name: __e.http_request.url.hostname
+          value: "''"
+        - name: __e.http_request.url.port
+          value: "''"
+        - name: __e.http_request.url.scheme
+          value: "''"
+        - name: __e.http_request.url.categories
+          value: "['']"
+        - name: __e.http_request.url.category_ids
+          value: "[0]"
+    groupId: A3Hryd
+    description: Assign recommended http_request fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/http_response
+    groupId: A3Hryd
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.http_response.code
+          value: "0"
+    groupId: A3Hryd
+    description: Assign recommended http_response fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/metadata
+    groupId: A3Hryd
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.metadata.product.lang
+          value: "''"
+        - name: __e.metadata.product.uid
+          value: "''"
+        - name: __e.metadata.product.version
+          value: "''"
+    groupId: A3Hryd
+    description: Assign recommended metadata fields
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - value: "(enrichments || {data: '', name: '', provider: '', type: '', value:
+            ''})"
+          name: enrichments
+        - value: "(observables || {name: '', type: '', type_id: '', value: ''})"
+          name: observables
+        - value: "(proxy || {hostname: '', ip: '', port: ''})"
+          name: proxy
+        - name: tls
+          value: "(tls || {certificate: '', certificate_chain: '', cipher: '',
+            client_ciphers: '', alert: '', extension_list: '', handshake_dur:
+            '', ja3_fingerprint: '', ja3_string: '', ja3s_fingerprint: '',
+            ja3s_string: '', key_length: '', server_ciphers: '', sni: '', sans:
+            '', version: ''})"
+        - name: tls.certificate
+          value: "(tls.certificate || {serial_number: '', created_time: '',
+            expiration_time: '', fingerprint: '', issuer_dn: '', subject_dn: '',
+            version: ''})"
+        - name: tls.certificate.fingerprint
+          value: "(tls.certificate.fingerprint || {algorithm: '', algorithm_id: '', value:
+            ''})"
+        - name: tls.extension_list
+          value: "(tls.extension_list || {data: '', type: '', type_id: ''})"
+        - name: tls.ja3_fingerprint
+          value: "(tls.ja3_fingerprint || {algorithm: '', algorithm_id: '', value: ''})"
+        - name: tls.jas3_fingerprint
+          value: "(tls.jas3_fingerprint || {algorithm: '', algorithm_id: '', value: ''})"
+        - name: tls.sans
+          value: "(tls.sans || {name: '', type: ''})"
+        - name: traffic
+          value: "(traffic || {bytes_in: '', bytes_out: '', packets_in: '', packets_out:
+            '', bytes: '', packets: ''})"
+        - name: dst_endpoint
+          value: "Object.assign(dst_endpoint, {location: '', domain: '', intermediate_ips:
+            '',mac: '', name: '', subnet_uid: '', vlan_uid:'',vpc_uid:''})"
+        - name: src_endpoint
+          value: "Object.assign(src_endpoint, {location: '', domain: '', intermediate_ips:
+            '',mac: '', name: '', subnet_uid: '', vlan_uid: '',vpc_uid: ''})"
+        - name: metadata
+          value: "Object.assign(metadata, {correlation_uid: '', uid: '', labels: '',
+            logged_time: '', modified_time: '', processed_time: '', sequence:
+            ''})"
+        - name: metadata.product
+          value: "Object.assign(metadata.product, {feature: '', path: ''})"
+        - name: metadata.product.feature
+          value: "Object.assign(metadata.product.feature, {uid: '', name: '', version:
+            ''})"
+        - name: connection_info
+          value: "Object.assign(connection_info, {boundary: '', boundary_id: '', uid: '',
+            protocol_ver: '', protocol_ver_id: '', protocol_name: '', tcp_flags:
+            ''})"
+        - name: http_request
+          value: "Object.assign(http_request, {args: '', referrer: '', prefix: '', uid:
+            '', x_forwarded_for: ''})"
+        - name: http_request.url
+          value: "Object.assign(http_request.url, {resource_type: ''})"
+        - name: http_response
+          value: "Object.assign(http_response, {content_type: '', latency: '', message:
+            '', length: '', status: ''})"
+    groupId: qBgPgc
+    description: "Build: [OPT] fields and array structures (DONT TOUCH)"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/http_request
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: __e.http_request.args
+          value: "''"
+        - name: __e.http_request.referrer
+          value: "''"
+        - name: __e.http_request.prefix
+          value: "''"
+        - name: __e.http_request.uid
+          value: "''"
+        - name: __e.http_request.x_forwarded_for
+          value: "['']"
+        - name: __e.http_request.url.resource_type
+          value: "''"
+    groupId: qBgPgc
+    description: Assign optional http_request fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/http_response
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: __e.http_response.content_type
+          value: "''"
+        - name: __e.http_response.latency
+          value: "0"
+        - name: __e.http_response.message
+          value: "''"
+        - name: __e.http_response.length
+          value: "0"
+        - name: __e.http_response.status
+          value: "''"
+    groupId: qBgPgc
+    description: Assign optional http_response fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/classes/http_activity?extensions=
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: http_status
+          value: "'0'"
+    groupId: qBgPgc
+    description: Assign optional http_status fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_connection_info
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.connection_info.boundry
+          value: "''"
+        - name: __e.connection_info.boundry_id
+          value: "0"
+        - name: __e.connection_info.uid
+          value: "''"
+        - name: __e.connection_info.protocol_ver
+          value: "''"
+        - name: __e.connection_info.protocol_ver_id
+          value: "0"
+        - name: __e.connection_info.protocol_name
+          value: "''"
+        - name: __e.connection_info.tcp_flags
+          value: "0"
+    groupId: qBgPgc
+    description: Assign optional connection_info fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_endpoint
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.dst_endpoint.location
+          value: "''"
+        - name: __e.dst_endpoint.domain
+          value: "''"
+        - name: __e.dst_endpoint.intermedaite_ips
+          value: "['']"
+        - name: __e.dst_endpoint.mac
+          value: "''"
+        - name: __e.dst_endpoint.name
+          value: "''"
+        - name: __e.dst_endpoint.subnet_uid
+          value: "''"
+        - name: __e.dst_endpoint.vlan_uid
+          value: "''"
+        - name: __e.dst_endpoint.vpc_uid
+          value: "''"
+    groupId: qBgPgc
+    description: Assign optional dst_endpoint fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_endpoint
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.src_endpoint.location
+          value: "''"
+        - name: __e.src_endpoint.domain
+          value: "''"
+        - name: __e.src_endpoint.intermediate_ips
+          value: "['']"
+        - name: __e.src_endpoint.mac
+          value: "''"
+        - name: __e.src_endpoint.name
+          value: "''"
+        - name: __e.src_endpoint.subnet_uid
+          value: "''"
+        - name: __e.src_endpoint.vlan_uid
+          value: "''"
+        - name: __e.src_endpoint.vpc_uid
+          value: "''"
+    groupId: qBgPgc
+    description: Assign optional src_endpoint fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/enrichment
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.enrichments.data
+          value: "['enrichment', 'fields', 'here']"
+        - name: __e.enrichments.name
+          value: "''"
+        - name: __e.enrichments.provider
+          value: "''"
+        - name: __e.enrichments.type
+          value: "''"
+        - name: __e.enrichments.value
+          value: "''"
+    groupId: qBgPgc
+    description: Assign optional enrichments fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/metadata
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.metadata.correlation_uid
+          value: "''"
+        - value: "''"
+          name: __e.metadata.uid
+        - value: "['']"
+          name: __e.metadata.labels
+        - value: "0"
+          name: __e.metadata.logged_time
+        - value: "0"
+          name: __e.metadata.modified_time
+        - value: "0"
+          name: __e.metadata.processed_time
+        - name: __e.metadata.product.feature.name
+          value: "''"
+        - name: __e.metadata.product.feature.uid
+          value: "''"
+        - name: __e.metadata.product.feature.version
+          value: "''"
+        - name: __e.metadata.product.path
+          value: "''"
+        - value: "0"
+          name: __e.metadata.sequence
+    groupId: qBgPgc
+    description: Assign optional metadata fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/observable
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.observables.name
+          value: "''"
+        - name: __e.observables.type
+          value: "''"
+        - name: __e.observables.type_id
+          value: "0"
+        - name: __e.observables.value
+          value: "''"
+    groupId: qBgPgc
+    description: Assign optional observables fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_proxy
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.proxy.hostname
+          value: "''"
+        - name: __e.proxy.ip
+          value: "''"
+        - name: __e.proxy.port
+          value: "0"
+    groupId: qBgPgc
+    description: Assign optional proxy fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/tls
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.tls.certificate.serial_number
+          value: "''"
+        - name: __e.tls.certificate.created_time
+          value: "0"
+        - name: __e.tls.certificate.expiration_time
+          value: "0"
+        - name: __e.tls.certificate.issuer_dn
+          value: "''"
+        - name: __e.tls.certificate.subject_dn
+          value: "''"
+        - name: __e.tls.certificate.version
+          value: "''"
+        - name: __e.tls.certificate.fingerprint.algorithm
+          value: "''"
+        - name: __e.tls.certificate.fingerprint.algorithm_id
+          value: "0"
+        - name: __e.tls.certificate.fingerprint.value
+          value: "''"
+        - name: __e.tls.certificate_chain
+          value: "['']"
+        - name: __e.tls.cipher
+          value: "''"
+        - name: __e.tls.client_ciphers
+          value: "['']"
+        - name: __e.tls.alert
+          value: "0"
+        - name: __e.tls.extension_list.data
+          value: "''"
+        - name: __e.tls.extension_list.type
+          value: "''"
+        - name: __e.tls.extension_list.type_id
+          value: "0"
+        - name: __e.tls.handshake_dur
+          value: "0"
+        - name: __e.tls.ja3.fingerprint.algorithm
+          value: "''"
+        - name: __e.tls.ja3.fingerprint.algorithm_id
+          value: "0"
+        - name: __e.tls.ja3.fingerprint.value
+          value: "''"
+        - name: __e.tls.ja3_string
+          value: "''"
+        - name: __e.tls.jas3.fingerprint.algorithm
+          value: "''"
+        - name: __e.tls.jas3.fingerprint.algorithm_id
+          value: "0"
+        - name: __e.tls.jas3.fingerprint.value
+          value: "''"
+        - name: __e.tls.jas3_string
+          value: "''"
+        - name: __e.tls.key_length
+          value: "0"
+        - name: __e.tls.server_ciphers
+          value: "['']"
+        - name: __e.tls.sni
+          value: "''"
+        - name: __e.tls.sans.name
+          value: "''"
+        - name: __e.tls.sans.type
+          value: "''"
+        - name: __e.tls.version
+          value: "''"
+    description: Assign optional tls fields
+    groupId: qBgPgc
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: https://schema.ocsf.io/objects/network_traffic
+    groupId: qBgPgc
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: __e.traffic.bytes_in
+          value: "0"
+        - name: __e.traffic.bytes_out
+          value: "0"
+        - name: __e.traffic.packets_in
+          value: "0"
+        - name: __e.traffic.packets_out
+          value: "0"
+        - name: __e.traffic.bytes
+          value: "0"
+        - name: __e.traffic.packets
+          value: "0"
+    groupId: qBgPgc
+    description: Assign optional traffic fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        the optional unmapped array is designed for fields that may be necessary
+        for security investigations, but is not a part of the schema. use the
+        eval below to map fieldnames and values as the schema is designed.
+
+
+        see here for more info: https://schema.ocsf.io/objects/object
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: unmapped
+          value: "[['key1', 'value1'],['key2', 'value2']]"
+    description: Assign optional unmapped fields
+  - id: eval
+    filter: duration==undefined
+    disabled: false
+    conf:
+      add:
+        - name: duration
+          value: " end_time - start_time"
+    description: Calculate duration field if not mapped
+    groupId: u6rXXF
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: activity
+          value: "activity=='' ? 'Unkown' : activity"
+        - name: activity_id
+          value: "activity_id=='' ? 0 : activity_id"
+        - name: category_name
+          value: "'Network Activity'"
+        - name: category_uid
+          value: "4"
+        - name: class_name
+          value: "'HTTP Activity'"
+        - name: class_uid
+          value: "4002"
+        - name: severity
+          value: "severity=='' ? 'Unkown' : severity"
+        - name: severity_id
+          value: "severity_id=='' ? 0 : severity_id"
+        - name: type_name
+          value: "class_name + ': ' + activity"
+        - name: type_uid
+          value: class_uid * 100 + activity_id
+        - name: _time
+          value: _time
+        - name: _raw_data
+          value: _raw
+      remove:
+        - _raw
+        - cribl*
+    description: "Mapping for classification and context fields "
+    groupId: u6rXXF
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: |-
+        Cloud Profile Fields:
+        cloud [REQ]- The cloud where the event was originally created or logged
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: cloud
+          value: "''"
+        - name: profiles
+          value: "profiles!=null ? [...Array(profiles), 'Cloud'] : profiles"
+        - name: profiles
+          value: "profiles==null ?  ['Cloud'] : profiles"
+    groupId: O5EGFF
+    description: Cloud Profile
+  - id: chain
+    filter: "true"
+    disabled: true
+    conf:
+      processor: Cloud_Profile
+    groupId: O5EGFF
+    description: Send to Cloud_Profile pipeline
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: |-
+        Host Profile Fields:
+        device [REC]- The device that reported the event
+        actor_process [OPT]- The process that requested the account changes
+    groupId: O5EGFF
+  - id: chain
+    filter: "true"
+    disabled: true
+    conf:
+      processor: Host_Profile
+    groupId: O5EGFF
+    description: Send to Host_Profile pipeline
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: >-
+        Malware Profile Fields:
+
+        attacks [OPT]- An array of attacks associated with an event
+
+        cvss [OPT]- (CVSS) scores from the advisory that are related to the vulnerability
+
+        detection_uid [OPT]- The associated unique detection event identifier
+
+        disposition [REQ]- the action taken by the security product
+
+        disposition_id [REQ]- the normalized numeric id for the action taken by the security product 
+
+        malware [REC]- The list of malware identified by a finding
+    groupId: O5EGFF
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: |-
+        Accepted values for: disposition_id
+        0	Unknown	
+        1	Blocked	
+        2	Allowed	
+        3	No Action	
+        4	Logged	
+        5	Command Script Run	
+        6	Corrected	
+        7	Partially Corrected	
+        8	Uncorrected	
+        10	Delayed	               Requires reboot to finish the operation
+        11	Detected	
+        12	Quarantined	
+        13	Restored	
+        14	Exonerated	       No longer suspicious (re-scored)
+        15	Tagged	               Marked with extended attributes
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: disposition
+          value: "''"
+        - name: disposition_id
+          value: "''"
+        - name: attacks
+          value: "['string','array']"
+        - name: cvss
+          value: "''"
+        - name: malware
+          value: "['string','array']"
+        - name: quarantine_uid
+          value: "''"
+        - name: detection_uid
+          value: "''"
+        - value: "profiles!=null ? [...Array(profiles), 'Malware'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['Malware'] : profiles"
+          name: profiles
+    groupId: O5EGFF
+    description: Malware Profile
+  - id: chain
+    filter: "true"
+    disabled: true
+    conf:
+      processor: Malware_Profile
+    groupId: O5EGFF
+    description: Send to Malware_Profile pipeline
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: >-
+        Reputation Profile Fields:
+
+        domain_info [REC]- The registration information pertaining to a domain
+
+        categories [REC]- A list of URL categories as defined by the event source
+
+        category_ids [REC]- An array of domain or URL category identifies
+
+        parent_categories [REC]- An array of parent URL categories
+
+        provider [REC]- The provider of the reputation and category information
+
+        reputation [OPT]- Contains the original and normalized reputation scores
+    groupId: O5EGFF
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: |-
+        Accepted values for: category_ids (-1 to 50)
+        -1	Other	The Domain/URL category is not mapped
+        0	Unknown	The Domain/URL category is unknown
+        1	Adult/Mature Content
+        3	Pornography
+        4	Sex Education
+        5	Intimate Apparel/Swimsuit
+        6	Nudity
+        7	Extreme
+        9	Scam/Questionable/Illegal
+        11	Gambling
+        14	Violence/Hate/Racism
+        15	Weapons	
+        16	Abortion	
+        17	Hacking	
+        18	Phishing	
+        20	Entertainment	
+        21	Business/Economy	
+        22	Alternative Spirituality/Belief
+        23	Alcohol
+        24	Tobacco
+        25	Controlled Substances
+        26	Child Pornography
+        27	Education
+        29	Charitable Organizations
+        30	Art/Culture
+        31	Financial Services
+        32	Brokerage/Trading
+        33	Games
+        34	Government/Legal
+        35	Military
+        36	Political/Social Advocacy
+        37	Health
+        38	Technology/Internet
+        40	Search Engines/Portals
+        43	Malicious Sources/Malnets
+        44	Malicious Outbound Data/Botnets
+        45	Job Search/Careers
+        46	News/Media
+        47	Personals/Dating	
+        49	Reference	
+        50	Mixed Content/Potentially Adult	
+    groupId: O5EGFF
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: |-
+        Accepted values for: category_ids (51 to 121)
+        51	Chat
+        52	Email
+        53	Newsgroups/Forums
+        54	Religion
+        55	Social Networking
+        56	File Storage/Sharing
+        57	Remote Access Tools
+        58	Shopping
+        59	Auctions
+        60	Real Estate
+        61	Society/Daily Living
+        63	Personal Sites
+        64	Restaurants/Dining/Food
+        65	Sports/Recreation
+        66	Travel
+        67	Vehicles
+        68	Humor/Jokes
+        71	Software Downloads
+        83	Peer-to-Peer
+        84	Audio/Video Clips
+        85	Office/Business Applications
+        86	Proxy Avoidance
+        87	For Kids
+        88	Web Ads/Analytics
+        89	Web Hosting
+        90	Uncategorized
+        92	Suspicious
+        93	Sexual Expression
+        95	Translation
+        96	Non-Viewable/Infrastructure
+        97	Content Servers
+        98	Placeholders
+        101	Spam
+        102	Potentially Unwanted Software
+        103	Dynamic DNS Host
+        106	E-Card/Invitations	
+        107	Informational
+        108	Computer/Information Security
+        109	Internet Connected Devices
+        110	Internet Telephony
+        111	Online Meetings
+        112	Media Sharing
+        113	Radio/Audio Streams
+        114	TV/Video Streams
+        118	Piracy/Copyright Concerns
+        121	Marijuana
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: provider
+          value: "''"
+        - name: domain_info
+          value: "''"
+        - name: reputation
+          value: "''"
+        - name: parent_categories
+          value: "['string','array']"
+        - name: categories
+          value: "['string','array']"
+        - name: category_ids
+          value: "[0,0]"
+        - value: "profiles!=null ? [...Array(profiles), 'Reputation'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['Reputation'] : profiles"
+          name: profiles
+    groupId: O5EGFF
+    description: Reputation Profile
+  - id: chain
+    filter: "true"
+    disabled: true
+    conf:
+      processor: Reputation_Profile
+    groupId: O5EGFF
+    description: Send to Reputation_Profile pipeline
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: >-
+        User Profile Fields:
+
+        user [REC]- the user that pertains to the event
+
+        is_user_present [OPT]- boolean for if the was logged on during event time
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: user
+          value: "''"
+        - name: is_user_present
+          value: "'boolean'"
+        - value: "profiles!=null ? [...Array(profiles), 'User'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['User'] : profiles"
+          name: profiles
+    groupId: O5EGFF
+    description: User Profile
+  - id: chain
+    filter: "true"
+    disabled: true
+    conf:
+      processor: User_Profile
+    groupId: O5EGFF
+    description: Send to User_Profile pipeline
+description: "(V1.0) Maps events to the following schema:
+  https://schema.ocsf.io/classes/http_activity?extensions="

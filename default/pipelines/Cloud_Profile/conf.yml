@@ -1,0 +1,121 @@
+output: default
+streamtags: []
+groups:
+  M1q7Hp:
+    name: Original Event Fields
+    description: map original fields from the event
+    index: 2
+    disabled: false
+  4hQH7m:
+    name: "EDIT ME: Event Profile Fields"
+    description: All available fields to be set for this profile
+    index: 3
+  xO7uYI:
+    name: Final Clean Up
+    index: 5
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: 'This pipeline maps "Network Activity" data to OCSF as defined in:
+        https://schema.ocsf.io/classes/network_activity?extensions='
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the following three groups starting with "EDIT ME:" are where you need
+        to map the original event fields to the OCSF naming convention and
+        structure. there are comments to help with completing each function.
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: cloud
+          value: "(cloud || {account_type: '', account_type_id: '', account_uid: '', zone:
+            '', org_uid: '', project_uid: '', provider: '', region: '',
+            resource_uid: '', service: ''})"
+        - name: cloud.service
+          value: "(cloud.service || {labels: '', name: '', uid: '', version: ''})"
+    groupId: M1q7Hp
+    description: build
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: __e.cloud.account_type
+          value: "''"
+        - name: __e.cloud.account_type_id
+          value: "0"
+        - name: __e.cloud.account_uid
+          value: "''"
+        - name: __e.cloud.zone
+          value: "''"
+        - name: __e.cloud.org_uid
+          value: "''"
+        - name: __e.cloud.project_uid
+          value: "''"
+        - name: __e.cloud.provider
+          value: "''"
+        - name: __e.cloud.region
+          value: "''"
+        - name: __e.cloud.resource_uid
+          value: "''"
+    groupId: 4hQH7m
+    description: Build observables fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the metadata array field is for any fields on the events that you would
+        consider metadata about the event. this could be fields like host,
+        source, sourcetype, and cribl fields on the event.
+    groupId: 4hQH7m
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "WARNING: only turn on the below serialize functions if you add fields
+        to them first"
+    groupId: 4hQH7m
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the enrichments array field is for any fields that were added to the
+        event as an enrichment data point. this could be fields like geoip
+        lookup or threat intelligence.
+    groupId: 4hQH7m
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the observables array field is for any fields that ???
+    groupId: 4hQH7m
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the unmapped array field is for any fields remaining that were not
+        mapped to an OCSF field or other array.
+    groupId: 4hQH7m
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the below groups are for finalizing the event formats and packaging it
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: profiles
+          value: "profiles!=null ? [...Array(profiles), 'Cloud'] : profiles"
+        - name: profiles
+          value: "profiles==null ?  ['Cloud'] : profiles"
+    description: Set profile var
+    groupId: xO7uYI
+description: WIP v1.0

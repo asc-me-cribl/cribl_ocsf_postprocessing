@@ -1,0 +1,1780 @@
+output: default
+streamtags: []
+groups:
+  M1q7Hp:
+    name: Original Event Fields
+    description: map original fields from the event
+    index: 2
+    disabled: true
+  WInbwq:
+    name: "EDIT ME: Event Classification"
+    description: enter values for each unique event type processed
+    index: 3
+  A3Hryd:
+    name: "EDIT ME: Field mapping"
+    description: use this group to rename fields to their OCSF keys
+    index: 4
+  4hQH7m:
+    name: "EDIT ME: Array Fields"
+    description: use these groups for any unmapped fields after completing the above
+      field mapping
+    index: 5
+  O5EGFF:
+    name: "EDIT ME: Event Profiles"
+    disabled: false
+    description: adds extra fields for mapping depending on the selected profile
+    index: 6
+  8xo2Ul:
+    name: Clean up
+    description: set default values for unmapped fields and perform calculations
+      where needed
+    index: 8
+  71Hl0j:
+    name: Package REQ, REC, and OPT fields
+    index: 9
+    description: Restructure event data into expected format keeping the required,
+      recommended, and optional fields
+    disabled: true
+  PShwIN:
+    name: Package REQ and REC fields
+    description: Restructure event data into expected format keeping the required,
+      and recommended fields
+    disabled: true
+    index: 10
+  032CQN:
+    name: Package REQ fields
+    description: Restructure event data into expected format keeping the required
+      fields only
+    disabled: true
+    index: 11
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: 'This pipeline maps "Network Activity" data to OCSF as defined in:
+        https://schema.ocsf.io/classes/network_activity?extensions='
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the following three groups starting with "EDIT ME:" are where you need
+        to map the original event fields to the OCSF naming convention and
+        structure. there are comments to help with completing each function.
+  - id: serialize
+    filter: "true"
+    disabled: true
+    conf:
+      type: json
+      dstField: record
+      fields:
+        - "!_*"
+        - "!host"
+        - "!source*"
+        - "!cribl*"
+        - "*"
+    description: build base record array
+    groupId: M1q7Hp
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: record
+          value: JSON.parse(record)
+    groupId: M1q7Hp
+    description: parse the json 'records' field
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "Instructions: copy the below eval function and duplicate it for each
+        unique event type that will be processed by this pipeline. any events
+        that do no have a value assigned in this group will be marked as
+        'unknown' at the end of the pipeline."
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        How to determine the values for the eval fields. for ref:
+        https://schema.ocsf.io/classes/network_activity?extensions=
+
+
+        activity [REQ]- the original activity that triggered the event _ ie. 'firewall accept'
+
+        activity_id [REQ]- a numeric identifier for the type of event, see key at the above link
+
+        severity [REQ]- the original event severity measuring the effort and expense required to resolve
+
+        severity_id [REQ]- a numeric identifier for the severity of the event, see key at the above link
+
+        status [REC]- 
+
+        status_id [REC]- 
+
+        status_code [OPT]- 
+
+        status_detail [OPT]- 
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Accepted values for: activity_id
+
+        -1	Other	        The event activity is not mapped
+
+        0	Unknown	        The event activity is unknown
+
+        1	Established	A new network connection was established
+
+        2	Closed	        The connection was closed
+
+        3	Reset	        The connection was abnormally terminated or closed by a middle device
+
+        4	Failed	        The connection failed
+
+        5	Refused	        The connection was refused
+
+        6	Traffic	        Network traffic report
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Accepted values for: severity_id
+
+        -1	Other	       The event severity is not mapped
+
+        0	Unknown	       The event severity is not known
+
+        1	Informational  Informational message. No action required
+
+        2	Low	       The user decides if action is needed
+
+        3	Medium	       Action is required but the situation is not serious at this time
+
+        4	High	       Action is required immediately
+
+        5	Critical       Action is required immediately and the scope is broad
+
+        6	Fatal	       An error occurred but it is too late to take remedial action
+    groupId: WInbwq
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Accepted values for: status_id
+        -1	Other	The event status is not mapped
+        0	Unknown	
+        1	Success	
+        2	Failure
+    groupId: WInbwq
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: activity
+          value: "''"
+        - name: activity_id
+          value: "0"
+        - name: severity
+          value: "''"
+        - name: severity_id
+          value: "0"
+        - name: status
+          value: "''"
+        - name: status_id
+          value: "0"
+        - name: status_code
+          value: "''"
+        - name: status_detail
+          value: "''"
+        - name: version
+          value: "'0.18.0'"
+    description: Classification fields for {given event type}
+    groupId: WInbwq
+  - id: serialize
+    filter: "true"
+    disabled: true
+    conf:
+      type: json
+      dstField: expected
+      fields:
+        - _time
+        - activity*
+        - category*
+        - class*
+    groupId: WInbwq
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: expected
+          value: JSON.parse(expected)
+    groupId: WInbwq
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: ci__boundry
+          value: "''"
+        - name: ci__boundry_id
+          value: "0"
+        - name: ci__uid
+          value: "''"
+        - name: ci__direction
+          value: "''"
+        - name: ci__direction_id
+          value: "0"
+        - name: ci__protocol_ver
+          value: "''"
+        - name: ci__protocol_ver_id
+          value: "0"
+        - name: ci__protocol_name
+          value: "''"
+        - name: ci__protocol_num
+          value: "0"
+        - name: ci__tcp_flags
+          value: "0"
+    groupId: A3Hryd
+    description: Build connection_info
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: dst__location
+          value: "''"
+        - name: dst__domain
+          value: "''"
+        - name: dst__uid
+          value: "''"
+        - name: dst__hostname
+          value: "''"
+        - name: dst__ip
+          value: "''"
+        - name: dst__instance_uid
+          value: "''"
+        - name: dst__intermedaite_ips
+          value: "['']"
+        - name: dst__mac
+          value: "''"
+        - name: dst__name
+          value: "''"
+        - name: dst__interface_uid
+          value: "''"
+        - name: dst__port
+          value: "0"
+        - name: dst__svc_name
+          value: "''"
+        - name: dst__subnet_uid
+          value: "''"
+        - name: dst__vlan_uid
+          value: "''"
+        - name: dst__vpc_uid
+          value: "''"
+    groupId: A3Hryd
+    description: Build dst_endpoint
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: src__location
+          value: "''"
+        - name: src__domain
+          value: "''"
+        - name: src__uid
+          value: "''"
+        - name: src__hostname
+          value: "''"
+        - name: src__ip
+          value: "''"
+        - name: src__instance_uid
+          value: "''"
+        - name: src__intermediate_ips
+          value: "['']"
+        - name: src__mac
+          value: "''"
+        - name: src__name
+          value: "''"
+        - name: src__interface_uid
+          value: "''"
+        - name: src__port
+          value: "0"
+        - name: src__svc_name
+          value: "''"
+        - name: src__subnet_uid
+          value: "''"
+        - name: src__vlan_uid
+          value: "''"
+        - name: src__vpc_uid
+          value: "''"
+    groupId: A3Hryd
+    description: Build src_endpoint
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: prod_x_feat__uid
+          value: "''"
+        - name: prod_x_feat__name
+          value: "''"
+        - name: prod_x_feat__version
+          value: "''"
+        - name: prod__lang
+          value: "''"
+        - name: prod__uid
+          value: "''"
+        - name: prod__name
+          value: "''"
+        - name: prod__path
+          value: "''"
+        - name: prod__version
+          value: "''"
+    groupId: A3Hryd
+    description: Build product
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: prox__hostname
+          value: "''"
+        - name: prox__ip
+          value: "''"
+        - name: prox__port
+          value: "0"
+    groupId: A3Hryd
+    description: Build proxy
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: tls_x_cert__serial_number
+          value: "''"
+        - name: tls_x_cert__created_time
+          value: "0"
+        - name: tls_x_cert__expiration_time
+          value: "0"
+        - name: tls_x_cert__issuer_dn
+          value: "''"
+        - name: tls_x_cert__subject_dn
+          value: "''"
+        - name: tls_x_cert__version
+          value: "''"
+        - name: tls_xx_cert__fin__algorithm
+          value: "''"
+        - name: tls_xx_cert__fin__algorithm_id
+          value: "0"
+        - name: tls_xx_cert__fin__value
+          value: "''"
+        - name: tls__certificate_chain
+          value: "['']"
+        - name: tls__cipher
+          value: "''"
+        - name: tls__client_ciphers
+          value: "['']"
+        - name: tls__alert
+          value: "0"
+        - name: tls_x_el__data
+          value: "''"
+        - name: tls_x_el__type
+          value: "''"
+        - name: tls_x_el__type_id
+          value: "0"
+        - name: tls__handshake_dur
+          value: "0"
+        - name: tls_x_ja3_fin__algorithm
+          value: "''"
+        - name: tls_x_ja3_fin__algorithm_id
+          value: "0"
+        - name: tls_x_ja3_fin__value
+          value: "''"
+        - name: tls__ja3_string
+          value: "''"
+        - name: tls_x_jas3_fin__algorithm
+          value: "''"
+        - name: tls_x_jas3_fin__algorithm_id
+          value: "0"
+        - name: tls_x_jas3_fin__value
+          value: "''"
+        - name: tls__jas3_string
+          value: "''"
+        - name: tls__key_length
+          value: "0"
+        - name: tls__server_ciphers
+          value: "['']"
+        - name: tls__sni
+          value: "''"
+        - name: tls_x_sans__name
+          value: "''"
+        - name: tls_x_sans__type
+          value: "''"
+        - name: tls__version
+          value: "''"
+    description: Build tls
+    groupId: A3Hryd
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add: []
+    groupId: A3Hryd
+    description: Build tls_sans
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: nt__bytes_in
+          value: "0"
+        - name: nt__bytes_out
+          value: "0"
+        - name: nt__packets_in
+          value: "0"
+        - name: nt__packets_out
+          value: "0"
+        - name: nt__bytes
+          value: "0"
+        - name: nt__packets
+          value: "0"
+    groupId: A3Hryd
+    description: Build traffic
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Required fields definition:
+        src_endpoint - The initiator (client) of the network connection
+        dst_endpoint - The responder (server) in a network connection
+    groupId: A3Hryd
+  - id: rename
+    filter: "true"
+    disabled: null
+    conf:
+      wildcardDepth: 5
+      rename:
+        - newName: dst__instance_uid
+          currentName: unmatched
+        - newName: dst__interface_uid
+          currentName: unmatched
+        - newName: dst__intermediate_ips
+          currentName: unmatched
+        - newName: dst__ip
+          currentName: unmatched
+        - newName: dst__port
+          currentName: unmatched
+        - newName: dst__subnet_uid
+          currentName: unmatched
+        - newName: dst__svc_name
+          currentName: unmatched
+        - newName: dst__vpc_uid
+          currentName: unmatched
+        - newName: src__instance_uid
+          currentName: unmatched
+        - newName: src__interface_uid
+          currentName: unmatched
+        - newName: src__intermediate_ips
+          currentName: unmatched
+        - newName: src__ip
+          currentName: unmatched
+        - newName: src__port
+          currentName: unmatched
+        - newName: src__subnet_uid
+          currentName: unmatched
+        - newName: src__svc_name
+          currentName: unmatched
+        - newName: src__vpc_uid
+          currentName: unmatched
+    groupId: A3Hryd
+    description: Required fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Recommended fields definition:
+
+        connection_info - The network connection information
+
+        message - The description of the event, as defined by the event source
+
+        ref_time - The original event time as reported by the source (if no specific field, use _time)
+
+        product - The product that reported the event
+
+        timezone_offset - The number of minutes that the reported event time is ahead or behind UTC +/-
+    groupId: A3Hryd
+  - id: rename
+    filter: "true"
+    disabled: null
+    conf:
+      wildcardDepth: 5
+      rename:
+        - newName: message
+          currentName: unmatched
+        - newName: ref_time
+          currentName: unmatched
+        - newName: product
+          currentName: unmatched
+        - newName: timezone_offset
+          currentName: unmatched
+    groupId: A3Hryd
+    description: Recommended fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Suggested fields definition:
+
+        app_name - The name of the application that is associated with the event or object
+
+        count - The number of times that events in the same logical group occurred 
+
+        start_time - for aggregate events, the start time (epoch) of the aggregate
+
+        end_time - for aggregate events, the end time (epoch) of the aggregate
+
+        duration - for aggregate events, the length of the aggregate (in seconds)
+
+        proxy - If a proxy connection is present, the connection from the client to the proxy server
+
+        ref_event_code - The event code/ID, as defined by the event source
+
+        ref_event_uid - the index of the event in an external event log
+
+        ref_event_name - The event name, as defined by the event source
+
+        tls - TLS attributes
+
+        traffic - the amount of data moving across a network at a given point of time
+    groupId: A3Hryd
+  - id: rename
+    filter: "true"
+    disabled: null
+    conf:
+      wildcardDepth: 5
+      rename:
+        - newName: app_name
+          currentName: unmatched
+        - newName: count
+          currentName: unmatched
+        - newName: start_time
+          currentName: start
+        - newName: end_time
+          currentName: end
+        - newName: duration
+          currentName: unmatched
+        - newName: ref_event_code
+          currentName: unmatched
+        - newName: ref_event_uid
+          currentName: unmatched
+        - newName: ref_event_name
+          currentName: unmatched
+    groupId: A3Hryd
+    description: Suggested fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the metadata array field is for any fields on the events that you would
+        consider metadata about the event. this could be fields like host,
+        source, sourcetype, and cribl fields on the event.
+    groupId: 4hQH7m
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: md__correlation_uid
+          value: "''"
+        - value: "''"
+          name: md__uid
+        - value: "['']"
+          name: md__labels
+        - value: "0"
+          name: md__logged_time
+        - value: "0"
+          name: md__modified_time
+        - value: "0"
+          name: md__processed_time
+        - value: "0"
+          name: md__sequence
+        - value: "'0.20.0'"
+          name: md__version
+    groupId: 4hQH7m
+    description: build metadata fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "WARNING: only turn on the below serialize functions if you add fields
+        to them first"
+    groupId: 4hQH7m
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the enrichments array field is for any fields that were added to the
+        event as an enrichment data point. this could be fields like geoip
+        lookup or threat intelligence.
+    groupId: 4hQH7m
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: enr__data
+          value: "['enrichment', 'fields', 'here']"
+        - name: enr__name
+          value: "''"
+        - name: enr__provider
+          value: "''"
+        - name: enr__type
+          value: "''"
+        - name: enr__value
+          value: "''"
+    groupId: 4hQH7m
+    description: Build enrichments fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the observables array field is for any fields that ???
+    groupId: 4hQH7m
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: ob__name
+          value: "''"
+        - name: ob__type
+          value: "''"
+        - name: ob__type_id
+          value: "0"
+        - name: ob__value
+          value: "''"
+    groupId: 4hQH7m
+    description: Build observables fields
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the unmapped array field is for any fields remaining that were not
+        mapped to an OCSF field or other array.
+    groupId: 4hQH7m
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add: []
+    groupId: 4hQH7m
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Cloud Profile Fields:
+        cloud [REQ]- The cloud where the event was originally created or logged
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: cloud
+          value: "''"
+        - name: profiles
+          value: "profiles!=null ? [...Array(profiles), 'Cloud'] : profiles"
+        - name: profiles
+          value: "profiles==null ?  ['Cloud'] : profiles"
+    groupId: O5EGFF
+    description: Cloud Profile
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Host Profile Fields:
+        device [REC]- The device that reported the event
+        actor_process [OPT]- The process that requested the account changes
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: hdev__autoscale_uid
+          value: "''"
+        - name: hdev__is_compliant
+          value: "true"
+        - name: hdev__desc
+          value: "''"
+        - name: hdev__domain
+          value: "''"
+        - name: hdev__uid
+          value: "''"
+        - name: hdev__hostname
+          value: "''"
+        - name: hdev__hypervisor
+          value: "''"
+        - name: hdev__imei
+          value: "''"
+        - name: hdev__ip
+          value: "''"
+        - name: hdev__instance_uid
+          value: "''"
+        - name: hdev__mac
+          value: "''"
+        - name: hdev__is_managed
+          value: "true"
+        - name: hdev__name
+          value: "''"
+        - name: hdev__interface_uid
+          value: "''"
+        - name: hdev__org_unit
+          value: "''"
+        - name: hdev__is_personal
+          value: "true"
+        - name: hdev__ref_uid
+          value: "''"
+        - name: hdev__region
+          value: "''"
+        - name: hdev__risk_level
+          value: "''"
+        - name: hdev__risk_level_id
+          value: "0"
+        - name: hdev__risk_score
+          value: "0"
+        - name: hdev__subnet
+          value: "''"
+        - name: hdev__subnet_uid
+          value: "''"
+        - name: hdev__is_trusted
+          value: "true"
+        - name: hdev__type
+          value: "''"
+        - name: hdev__type_id
+          value: "0"
+        - name: hdev__vlan_uid
+          value: "''"
+        - name: hdev__vpc_uid
+          value: "''"
+        - name: hdev_x_loc__city
+          value: "''"
+        - name: hdev_x_loc__continent
+          value: "''"
+        - name: hdev_x_loc__coordinates
+          value: "['','']"
+        - name: hdev_x_loc__country
+          value: "''"
+        - name: hdev_x_loc__dec
+          value: "''"
+        - name: hdev_x_loc__isp
+          value: "''"
+        - name: hdev_x_loc__is_on_premises
+          value: "true"
+        - name: hdev_x_loc__postal_code
+          value: "''"
+        - name: hdev_x_loc__provider
+          value: "''"
+        - name: hdev_x_loc__region
+          value: "''"
+        - name: hdev_x_grp__type
+          value: "''"
+        - name: hdev_x_grp__desc
+          value: "''"
+        - name: hdev_x_grp__name
+          value: "''"
+        - name: hdev_x_grp__privileges
+          value: "['']"
+        - name: hdev_x_grp__uid
+          value: "''"
+        - name: hdev_x_hw__bios_date
+          value: "''"
+        - name: hdev_x_hw__bios_manufacturer
+          value: "''"
+        - name: hdev_x_hw__bios_ver
+          value: "''"
+        - name: hdev_x_hw__cpu_bits
+          value: "0"
+        - name: hdev_x_hw__cpu_cores
+          value: "0"
+        - name: hdev_x_hw__cpu_count
+          value: "0"
+        - name: hdev_x_hw__chassis
+          value: "''"
+        - name: hdev_x_hw__cpu_speed
+          value: "0"
+        - name: hdev_x_hw__cpu_type
+          value: "''"
+        - name: hdev_x_hw__ram_size
+          value: "0"
+        - name: hdev_x_hw__serial_number
+          value: "''"
+        - name: hdev_x_img__uid
+          value: "''"
+        - name: hdev_x_img__name
+          value: "''"
+        - name: hdev_x_img__tag
+          value: "''"
+        - name: hdev_x_img__labels
+          value: "['']"
+        - name: hdev_x_img__path
+          value: "''"
+        - name: hdev_x_net__uid
+          value: "''"
+        - name: hdev_x_net__hostname
+          value: "''"
+        - name: hdev_x_net__ip
+          value: "''"
+        - name: hdev_x_net__mac
+          value: "''"
+        - name: hdev_x_net__name
+          value: "''"
+        - name: hdev_x_net__namespace
+          value: "''"
+        - name: hdev_x_net__type
+          value: "''"
+        - name: hdev_x_net__type_id
+          value: "0"
+        - name: hdev_x_os__cpu_bits
+          value: "0"
+        - name: hdev_x_os__country
+          value: "''"
+        - name: hdev_x_os__lang
+          value: "''"
+        - name: hdev_x_os__name
+          value: "''"
+        - name: hdev_x_os__build
+          value: "''"
+        - name: hdev_x_os__edition
+          value: "''"
+        - name: hdev_x_os__sp_name
+          value: "''"
+        - name: hdev_x_os__sp_ver
+          value: "0"
+        - name: hdev_x_os__type
+          value: "''"
+        - name: hdev_x_os__type_id
+          value: "0"
+        - name: hdev_x_os__version
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Device Profile"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - value: "profiles!=null ? [...Array(profiles), 'Host'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['Host'] : profiles"
+          name: profiles
+        - name: hap__cmd_line
+          value: "''"
+        - name: hap__created_time
+          value: "0"
+        - name: hap__integrity
+          value: "''"
+        - name: hap__integrity_id
+          value: "0"
+        - name: hap__lineage
+          value: "['']"
+        - name: hap__loaded_modules
+          value: "['']"
+        - name: hap__name
+          value: "''"
+        - name: hap__path
+          value: "''"
+        - name: hap__pid
+          value: "0"
+        - name: hap__uid
+          value: "''"
+        - name: hap__sandbox
+          value: "''"
+        - name: hap__terminated_time
+          value: "0"
+        - name: hap__tid
+          value: "0"
+        - name: hap_xx_usr__run__type
+          value: "''"
+        - name: hap_xx_usr__run__desc
+          value: "''"
+        - name: hap_xx_usr__run__name
+          value: "''"
+        - name: hap_xx_usr__run__privileges
+          value: "['']"
+        - name: hap_xx_usr__run__uid
+          value: "''"
+        - name: hap_x_usr__account_type
+          value: "''"
+        - name: hap_x_usr__account_type_id
+          value: "''"
+        - name: hap_x_usr__account_uid
+          value: "''"
+        - name: hap_x_usr__domain
+          value: "''"
+        - name: hap_x_usr__email_addr
+          value: "''"
+        - name: hap_x_usr__name
+          value: "''"
+        - name: hap_x_usr__org_uid
+          value: "''"
+        - name: hap_x_usr__session_uid
+          value: "''"
+        - name: hap_x_usr__session_uuid
+          value: "''"
+        - name: hap_x_usr__type
+          value: "''"
+        - name: hap_x_usr__type_id
+          value: "0"
+        - name: hap_x_usr__uuid
+          value: "''"
+        - name: hap_x_usr__credential_uid
+          value: "''"
+        - name: hap_x_usr__uid
+          value: "''"
+        - name: hap_x_pp__cmd_line
+          value: "''"
+        - name: hap_x_pp__path
+          value: "''"
+        - name: hap_x_pp__pid
+          value: "0"
+        - name: hap_x_file__name
+          value: "''"
+        - name: hap_x_file__type
+          value: "''"
+        - name: hap_x_file__type_id
+          value: "0"
+    groupId: O5EGFF
+    description: "Host: Active Process Profile"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Malware Profile Fields:
+
+        attacks [OPT]- An array of attacks associated with an event
+
+        cvss [OPT]- (CVSS) scores from the advisory that are related to the vulnerability
+
+        detection_uid [OPT]- The associated unique detection event identifier
+
+        disposition [REQ]- the action taken by the security product
+
+        disposition_id [REQ]- the normalized numeric id for the action taken by the security product 
+
+        malware [REC]- The list of malware identified by a finding
+    groupId: O5EGFF
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Accepted values for: disposition_id
+        0	Unknown	
+        1	Blocked	
+        2	Allowed	
+        3	No Action	
+        4	Logged	
+        5	Command Script Run	
+        6	Corrected	
+        7	Partially Corrected	
+        8	Uncorrected	
+        10	Delayed	               Requires reboot to finish the operation
+        11	Detected	
+        12	Quarantined	
+        13	Restored	
+        14	Exonerated	       No longer suspicious (re-scored)
+        15	Tagged	               Marked with extended attributes
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: disposition
+          value: "''"
+        - name: disposition_id
+          value: "''"
+        - name: attacks
+          value: "['string','array']"
+        - name: cvss
+          value: "''"
+        - name: malware
+          value: "['string','array']"
+        - name: quarantine_uid
+          value: "''"
+        - name: detection_uid
+          value: "''"
+        - value: "profiles!=null ? [...Array(profiles), 'Malware'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['Malware'] : profiles"
+          name: profiles
+    groupId: O5EGFF
+    description: Malware Profile
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Reputation Profile Fields:
+
+        domain_info [REC]- The registration information pertaining to a domain
+
+        categories [REC]- A list of URL categories as defined by the event source
+
+        category_ids [REC]- An array of domain or URL category identifies
+
+        parent_categories [REC]- An array of parent URL categories
+
+        provider [REC]- The provider of the reputation and category information
+
+        reputation [OPT]- Contains the original and normalized reputation scores
+    groupId: O5EGFF
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Accepted values for: category_ids (-1 to 50)
+        -1	Other	The Domain/URL category is not mapped
+        0	Unknown	The Domain/URL category is unknown
+        1	Adult/Mature Content
+        3	Pornography
+        4	Sex Education
+        5	Intimate Apparel/Swimsuit
+        6	Nudity
+        7	Extreme
+        9	Scam/Questionable/Illegal
+        11	Gambling
+        14	Violence/Hate/Racism
+        15	Weapons	
+        16	Abortion	
+        17	Hacking	
+        18	Phishing	
+        20	Entertainment	
+        21	Business/Economy	
+        22	Alternative Spirituality/Belief
+        23	Alcohol
+        24	Tobacco
+        25	Controlled Substances
+        26	Child Pornography
+        27	Education
+        29	Charitable Organizations
+        30	Art/Culture
+        31	Financial Services
+        32	Brokerage/Trading
+        33	Games
+        34	Government/Legal
+        35	Military
+        36	Political/Social Advocacy
+        37	Health
+        38	Technology/Internet
+        40	Search Engines/Portals
+        43	Malicious Sources/Malnets
+        44	Malicious Outbound Data/Botnets
+        45	Job Search/Careers
+        46	News/Media
+        47	Personals/Dating	
+        49	Reference	
+        50	Mixed Content/Potentially Adult	
+    groupId: O5EGFF
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Accepted values for: category_ids (51 to 121)
+        51	Chat
+        52	Email
+        53	Newsgroups/Forums
+        54	Religion
+        55	Social Networking
+        56	File Storage/Sharing
+        57	Remote Access Tools
+        58	Shopping
+        59	Auctions
+        60	Real Estate
+        61	Society/Daily Living
+        63	Personal Sites
+        64	Restaurants/Dining/Food
+        65	Sports/Recreation
+        66	Travel
+        67	Vehicles
+        68	Humor/Jokes
+        71	Software Downloads
+        83	Peer-to-Peer
+        84	Audio/Video Clips
+        85	Office/Business Applications
+        86	Proxy Avoidance
+        87	For Kids
+        88	Web Ads/Analytics
+        89	Web Hosting
+        90	Uncategorized
+        92	Suspicious
+        93	Sexual Expression
+        95	Translation
+        96	Non-Viewable/Infrastructure
+        97	Content Servers
+        98	Placeholders
+        101	Spam
+        102	Potentially Unwanted Software
+        103	Dynamic DNS Host
+        106	E-Card/Invitations	
+        107	Informational
+        108	Computer/Information Security
+        109	Internet Connected Devices
+        110	Internet Telephony
+        111	Online Meetings
+        112	Media Sharing
+        113	Radio/Audio Streams
+        114	TV/Video Streams
+        118	Piracy/Copyright Concerns
+        121	Marijuana
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: provider
+          value: "''"
+        - name: domain_info
+          value: "''"
+        - name: reputation
+          value: "''"
+        - name: parent_categories
+          value: "['string','array']"
+        - name: categories
+          value: "['string','array']"
+        - name: category_ids
+          value: "[0,0]"
+        - value: "profiles!=null ? [...Array(profiles), 'Reputation'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['Reputation'] : profiles"
+          name: profiles
+    groupId: O5EGFF
+    description: Reputation Profile
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        User Profile Fields:
+
+        user [REC]- the user that pertains to the event
+
+        is_user_present [OPT]- boolean for if the was logged on during event time
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: user
+          value: "''"
+        - name: is_user_present
+          value: "'boolean'"
+        - value: "profiles!=null ? [...Array(profiles), 'User'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['User'] : profiles"
+          name: profiles
+    groupId: O5EGFF
+    description: User Profile
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the below groups are for finalizing the event formats and packaging it
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: dst_endpoint
+      fields:
+        - dst__*
+    groupId: 8xo2Ul
+    description: Build dst_endpoint object
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: src_endpoint
+      fields:
+        - src__*
+    groupId: 8xo2Ul
+    description: Build src_endpoint object
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: connection_info
+      fields:
+        - ci__*
+    groupId: 8xo2Ul
+    description: Build connection_info object
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: prod__feature
+      fields:
+        - prod_x_feat_*
+    groupId: 8xo2Ul
+    description: Build product_feature
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: product
+      fields:
+        - prod__*
+    groupId: 8xo2Ul
+    description: Build product object
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: proxy
+      fields:
+        - prox__*
+    groupId: 8xo2Ul
+    description: Build proxy object
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: tls_x_cert__fingerprint
+      fields:
+        - tls_xx_cert__fin_*
+    groupId: 8xo2Ul
+    description: Build tls_cert_fingerprint
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: tls__certificate
+      fields:
+        - tls_x_cert_*
+    groupId: 8xo2Ul
+    description: Build tls_cert
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: tls__extension_list
+      fields:
+        - tls_x_el_*
+    groupId: 8xo2Ul
+    description: Build tls_extension_list
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: tls__ja3_fingerprint
+      fields:
+        - tls_x_ja3_fin_*
+    groupId: 8xo2Ul
+    description: Build tls_ja3_fingerprint
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: tls__jas3_fingerprint
+      fields:
+        - tls_x_jas3_fin_*
+    groupId: 8xo2Ul
+    description: Build tls_jas3_fingerprint
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: tls__sans
+      fields:
+        - tls_x_sans_*
+    groupId: 8xo2Ul
+    description: Build tls_sans
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: tls
+      fields:
+        - tls__*
+    groupId: 8xo2Ul
+    description: Build tls object
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: traffic
+      fields:
+        - nt__*
+    groupId: 8xo2Ul
+    description: Build traffic object
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: metadata
+      fields:
+        - md__*
+    groupId: 8xo2Ul
+    description: Metadata fields [REQ]
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: enrichments
+      fields:
+        - enr__*
+    groupId: 8xo2Ul
+    description: Enrichments fields [OPT]
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: observables
+      fields:
+        - ob__*
+    description: Observables Fields [OPT]
+    groupId: 8xo2Ul
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: hdev__location
+      fields:
+        - hdev_x_loc__*
+    groupId: 8xo2Ul
+    description: "Build profiles: host_device_loc"
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: hdev__groups
+      fields:
+        - hdev_x_grp_*
+    groupId: 8xo2Ul
+    description: "Build profiles: host_device_group"
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: hdev__hardware_info
+      fields:
+        - hdev_x_hw_*
+    groupId: 8xo2Ul
+    description: "Build profiles: host_device_hardware"
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: hdev__image
+      fields:
+        - hdev_x_img_*
+    groupId: 8xo2Ul
+    description: "Build profiles: host_device_image"
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: hdev__network_interfaces
+      fields:
+        - hdev_x_net_*
+    groupId: 8xo2Ul
+    description: "Build profiles: host_device_network"
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: hdev__os
+      fields:
+        - hdev_x_os_*
+    groupId: 8xo2Ul
+    description: "Build profiles: host_device_os"
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: device
+      fields:
+        - hdev__*
+    groupId: 8xo2Ul
+    description: "Build profiles: host_device"
+  - id: mask
+    filter: "true"
+    disabled: false
+    conf:
+      rules:
+        - matchRegex: /\w+__/gm
+          replaceExpr: "''"
+      fields:
+        - connection_info
+        - src_endpoint
+        - dst_endpoint
+        - traffic
+        - tls
+        - proxy
+        - product
+        - metadata
+        - enrichments
+        - observables
+        - unmapped
+        - device
+      depth: 5
+    groupId: 8xo2Ul
+    description: removed keys from json objects
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: dst_endpoint
+          value: JSON.parse(dst_endpoint)
+        - name: src_endpoint
+          value: JSON.parse(src_endpoint)
+        - name: connection_info
+          value: JSON.parse(connection_info)
+        - name: traffic
+          value: JSON.parse(traffic)
+        - name: tls
+          value: JSON.parse(tls)
+        - value: JSON.parse(tls.certificate)
+          name: tls.certificate
+        - name: tls.certificate.fingerprint
+          value: JSON.parse(tls.certificate.fingerprint)
+        - name: tls.extension_list
+          value: JSON.parse(tls.extension_list)
+        - name: tls.ja3_fingerprint
+          value: JSON.parse(tls.ja3_fingerprint)
+        - name: tls.jas3_fingerprint
+          value: JSON.parse(tls.jas3_fingerprint)
+        - name: tls.sans
+          value: JSON.parse(tls.sans)
+        - name: proxy
+          value: JSON.parse(proxy)
+        - name: product
+          value: JSON.parse(product)
+        - value: JSON.parse(product.feature)
+          name: product.feature
+        - name: metadata
+          value: JSON.parse(metadata)
+        - name: enrichments
+          value: JSON.parse(enrichments)
+        - name: observables
+          value: JSON.parse(observables)
+        - value: JSON.parse(device)
+          name: device
+        - value: JSON.parse(device.location)
+          name: device.location
+        - value: JSON.parse(device.groups)
+          name: device.groups
+        - value: JSON.parse(device.hardware_info)
+          name: device.hardware_info
+        - value: JSON.parse(device.network_interfaces)
+          name: device.network_interfaces
+        - value: JSON.parse(device.image)
+          name: device.image
+        - value: JSON.parse(device.os)
+          name: device.os
+      remove:
+        - dst__*
+        - src__*
+        - ci__*
+        - nt__*
+        - tls__*
+        - tls_x_*
+        - tls_xx_*
+        - prox__*
+        - ob__*
+        - md__*
+        - enr__*
+        - prod__*
+        - prod_x_*
+        - hdev_x_*
+        - hdev__*
+    groupId: 8xo2Ul
+    description: parse json objects
+  - id: eval
+    filter: duration==undefined
+    disabled: null
+    conf:
+      add:
+        - name: duration
+          value: " end_time - start_time"
+    description: Calculate duration field if not mapped
+    groupId: 8xo2Ul
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: activity
+          value: "activity=='' ? 'Unkown' : activity"
+        - name: activity_id
+          value: "activity_id=='' ? 0 : activity_id"
+        - name: category_name
+          value: "'Network Activity'"
+        - name: category_uid
+          value: "4"
+        - name: class_name
+          value: "'Network Activity'"
+        - name: class_uid
+          value: "4001"
+        - name: severity
+          value: "severity=='' ? 'Unkown' : severity"
+        - name: severity_id
+          value: "severity_id=='' ? 0 : severity_id"
+        - name: type_name
+          value: "class_name + ': ' + activity"
+        - name: type_uid
+          value: class_uid * 100 + activity_id
+        - name: _time
+          value: _time
+        - name: _raw_data
+          value: _raw
+      remove:
+        - _raw
+        - cribl*
+    description: "Mapping for classification and context fields "
+    groupId: 8xo2Ul
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      remove:
+        - _time
+        - activity
+        - activity_id
+        - category_name
+        - category_uid
+        - class_name
+        - class_uid
+        - severity
+        - severity_id
+        - type_name
+        - type_uid
+        - start_time
+        - end_time
+        - duration
+        - _raw_data
+        - metadata*
+        - enrichments*
+        - observables*
+        - unmapped*
+        - profiles*
+        - user
+        - is_user_present
+        - domain_info
+        - categories
+        - category_ids
+        - parent_categories
+        - provider
+        - reputation
+        - attacks
+        - cvss
+        - detection_uid
+        - disposition
+        - disposition_id
+        - malware
+        - device
+        - actor_process
+        - cloud
+        - traffic
+        - tls
+        - ref_event_code
+        - ref_event_uid
+        - ref_event_name
+        - connection_info
+        - count
+        - dst_endpoint
+        - message
+        - ref_time
+        - product
+        - proxy
+        - src_endpoint
+        - status
+        - status_code
+        - status_detail
+        - timezone_offset
+        - app_name
+        - status_id
+      add:
+        - name: _raw
+          value: JSON.parse(_raw)
+    groupId: 71Hl0j
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      remove:
+        - _time
+        - activity
+        - activity_id
+        - category_name
+        - category_uid
+        - class_name
+        - class_uid
+        - severity
+        - severity_id
+        - type_name
+        - type_uid
+        - start_time
+        - end_time
+        - duration
+        - _raw_data
+        - metadata*
+        - enrichments*
+        - observables*
+        - unmapped*
+        - profiles*
+        - user
+        - is_user_present
+        - domain_info
+        - categories
+        - category_ids
+        - parent_categories
+        - provider
+        - reputation
+        - attacks
+        - cvss
+        - detection_uid
+        - disposition
+        - disposition_id
+        - malware
+        - device
+        - actor_process
+        - cloud
+        - traffic
+        - tls
+        - ref_event_code
+        - ref_event_uid
+        - ref_event_name
+        - connection_info
+        - count
+        - dst_endpoint
+        - message
+        - ref_time
+        - product
+        - proxy
+        - src_endpoint
+        - status
+        - status_code
+        - status_detail
+        - timezone_offset
+        - app_name
+        - status_id
+      add:
+        - name: _raw
+          value: JSON.parse(_raw)
+    groupId: PShwIN
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      remove:
+        - _time
+        - activity
+        - activity_id
+        - category_name
+        - category_uid
+        - class_name
+        - class_uid
+        - severity
+        - severity_id
+        - type_name
+        - type_uid
+        - start_time
+        - end_time
+        - duration
+        - _raw_data
+        - metadata*
+        - enrichments*
+        - observables*
+        - unmapped*
+        - profiles*
+        - user
+        - is_user_present
+        - domain_info
+        - categories
+        - category_ids
+        - parent_categories
+        - provider
+        - reputation
+        - attacks
+        - cvss
+        - detection_uid
+        - disposition
+        - disposition_id
+        - malware
+        - device
+        - actor_process
+        - cloud
+        - traffic
+        - tls
+        - ref_event_code
+        - ref_event_uid
+        - ref_event_name
+        - connection_info
+        - count
+        - dst_endpoint
+        - message
+        - ref_time
+        - product
+        - proxy
+        - src_endpoint
+        - status
+        - status_code
+        - status_detail
+        - timezone_offset
+        - app_name
+        - status_id
+      add:
+        - name: _raw
+          value: JSON.parse(_raw)
+    groupId: 032CQN
+description: WIP v1.0

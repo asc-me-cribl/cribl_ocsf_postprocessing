@@ -1,0 +1,1 @@
+{"version":"0.0.1","tags":{"streamtags":[],"dataType":["logs"],"useCase":["enrichment"],"technology":["aws"]},"displayName":"AWS OCSF Mapping","minLogStreamVersion":"3.5.0","author":"Alex Cain","name":"AWS_OCSF_Mapping"}

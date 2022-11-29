@@ -1,0 +1,617 @@
+output: default
+streamtags: []
+groups:
+  HBZByU:
+    name: Build profile arrays
+    index: 2
+  O5EGFF:
+    name: "EDIT ME: Required Fields"
+    disabled: false
+    description: adds extra fields for mapping depending on the selected profile
+    index: 3
+  xh9wF1:
+    name: Final Clean Up
+    index: 5
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: 'This pipeline maps "Network Activity" data to OCSF as defined in:
+        https://schema.ocsf.io/classes/network_activity?extensions='
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the following three groups starting with "EDIT ME:" are where you need
+        to map the original event fields to the OCSF naming convention and
+        structure. there are comments to help with completing each function.
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: device
+          value: "(device || {autoscale_uid: '', is_compliant: '', desc: '', domain: '',
+            uid:'', groups: '', hw_info: '', hostname: '', hypervisor: '', imei:
+            '', ip: '', image: '', instance_uid: '', mac: '', is_managed: '',
+            name: '', interface_uid: '', network_interfaces: '', os: '',
+            org_unit: '', is_personal: '', ref_uid: '', region: '', risk_level:
+            '', risk_level_id: '', risk_score: '', subnet: '', subnet_uid: '',
+            type: '', type_id: '', vlan_uid: '', vpc_uid: ''})"
+        - name: device.location
+          value: "(device.location || {city: '', continent: '', country: '', desc: '',
+            isp: '', is_on_premises: '', postal_code: '', provider: '', region:
+            ''})"
+        - value: "(device.group || {type: '', desc: '', name: '', priviledges: '', uid:
+            ''})"
+          name: device.groups
+        - name: device.hardware
+          value: "(device.hardware || {bios_date: '', manufacturer: '', bios_ver: '',
+            cpu_bits: '', cpu_cores: '', cpu_count: '', chassis: '', cpu_speed:
+            '', ram_size: '', serial_number: ''})"
+        - name: device.image
+          value: "(device.image || {uid: '', name: '', tag: '', labels: '', path: ''})"
+        - value: "(test.os || {release: '', version: ''})"
+          name: device.network
+        - name: device.os
+          value: "(device.os || {cpu_bits: '', country: '', lang: '', name: '', build: '',
+            edition: '', sp_name: '', sp_ver: '', type: ''})"
+    description: "Host: Device Profile"
+    groupId: HBZByU
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - name: actor_process
+          value: "(actor_process || {cmd_line: '', created_time: '', file: '', integrity:
+            '', integrity_id: '', lineage: '', loaded_modules: '', name: '',
+            parent_process: '', path: '', pid: '', uid: '', run_as: '', sandbox:
+            '', terminated_time: '', tid: ''})"
+        - name: actor_process.file
+          value: "(actor_process.file || {accessed_time: '', accessed_time_dt: '',
+            accessor: '', attributes: '', company_name: '', confidentiality: '',
+            confidentiality_id: '', created_time: '',created_time_dt: '',
+            creator: '', desc: '', signature: '', xattributes: '', fingerprints:
+            '', mime_type: '', modified_time: '', modified_time_dt: '',
+            modifier: '', name: '', owner: '', parent_folder: '', path: '',
+            product: '', security_descriptor: '', size: '', is_system: '', type:
+            '', type_id: '', uid: '', version: ''})"
+        - value: "(actor_process.file.signature || {company_name: '', created_time: '',
+            created_time_dt: '', developer_uid: '', fingerprints: '',
+            issuer_name: '', serial_number: ''})"
+          name: actor_process.file.signature
+        - value: "(actor_process.file.signature.fingerprints || {algorithm: '',
+            algorithm_id: '', value: ''})"
+          name: actor_process.file.signature.fingerprint
+        - value: "(actor_process.file.fingerprints || {algorithm: '', algorithm_id: '',
+            value: ''})"
+          name: actor_process.file.fingerprints
+        - name: actor_process.file.product
+          value: "(actor_process.file.product || {feature: '', lang: '', uid: '', name:
+            '', path: '', version: ''})"
+        - name: actor_process.file.product.feature
+          value: "(actor_process.file.product.feature || {uid: '', name: '', version:
+            ''})"
+        - name: actor_process.parent_process
+          value: "(actor_process.parent_process || {cmd_line: '', path: '', pid: ''})"
+        - name: actor_process.run_as
+          value: "(actor_process.run_as || {account_type: '', account_type_id: '',
+            account_uid: '', credential_uid: '', domain: '', email_addr: '',
+            name: '', org_uid: '', session_uid: '', session_uuid: '', type: '',
+            type_id: '', uid: '', uuid: '', groups: ''})"
+        - name: actor_process.run_as.groups
+          value: "(actor_process.run_as.groups || {desc: '', name: '', priviledges: '',
+            type: '', uid: ''})"
+    groupId: HBZByU
+    description: "Host: Actor_Process Profile"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Cloud Profile Fields:
+        cloud [REQ]- The cloud where the event was originally created or logged
+    groupId: O5EGFF
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: |-
+        Host Profile Fields:
+        device [REC]- The device that reported the event
+        actor_process [OPT]- The process that requested the account changes
+    groupId: O5EGFF
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - name: provider
+          value: "''"
+        - name: domain_info
+          value: "''"
+        - name: reputation
+          value: "''"
+        - name: parent_categories
+          value: "['string','array']"
+        - name: categories
+          value: "['string','array']"
+        - name: category_ids
+          value: "[0,0]"
+        - value: "profiles!=null ? [...Array(profiles), 'Reputation'] : profiles"
+          name: profiles
+        - value: "profiles==null ?  ['Reputation'] : profiles"
+          name: profiles
+    groupId: O5EGFF
+    description: Reputation Profile
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.actor_process.cmd_line
+          value: "''"
+        - name: __e.actor_process.created_time
+          value: "0"
+        - name: __e.actor_process.integrity
+          value: "''"
+        - name: __e.actor_process.integrity_id
+          value: "0"
+        - name: __e.actor_process.lineage
+          value: "['']"
+        - name: __e.actor_process.loaded_modules
+          value: "['']"
+        - name: __e.actor_process.name
+          value: "''"
+        - name: __e.actor_process.path
+          value: "''"
+        - name: __e.actor_process.pid
+          value: "0"
+        - name: __e.actor_process.uid
+          value: "''"
+        - name: __e.actor_process.sandbox
+          value: "''"
+        - name: __e.actor_process.terminated_time
+          value: "0"
+        - name: __e.actor_process.tid
+          value: "0"
+        - name: __e.actor_process.run_as.type
+          value: "''"
+        - name: __e.actor_process.run_as.desc
+          value: "''"
+        - name: __e.actor_process.run_as.name
+          value: "''"
+        - name: __e.actor_process.run_as.privileges
+          value: "['']"
+        - name: __e.actor_process.run_as.uid
+          value: "''"
+        - name: __e.actor_process.run_as.account_type
+          value: "''"
+        - name: __e.actor_process.run_as.account_type_id
+          value: "''"
+        - name: __e.actor_process.run_as.account_uid
+          value: "''"
+        - name: __e.actor_process.run_as.domain
+          value: "''"
+        - name: __e.actor_process.run_as.email_addr
+          value: "''"
+        - name: __e.actor_process.run_as.name
+          value: "''"
+        - name: __e.actor_process.run_as.org_uid
+          value: "''"
+        - name: __e.actor_process.run_as.session_uid
+          value: "''"
+        - name: __e.actor_process.run_as.session_uuid
+          value: "''"
+        - name: __e.actor_process.run_as.type
+          value: "''"
+        - name: __e.actor_process.run_as.type_id
+          value: "0"
+        - name: __e.actor_process.run_as.uuid
+          value: "''"
+        - name: __e.actor_process.run_as.credential_uid
+          value: "''"
+        - name: __e.actor_process.run_as.uid
+          value: "''"
+        - name: __e.actor_process.pp__cmd_line
+          value: "''"
+        - name: __e.actor_process.pp__path
+          value: "''"
+        - name: __e.actor_process.pp__pid
+          value: "0"
+        - name: __e.actor_process.file.name
+          value: "''"
+        - name: __e.actor_process.file.type
+          value: "''"
+        - name: __e.actor_process.file.type_id
+          value: "0"
+    groupId: O5EGFF
+    description: "Host: Active_Process- Base"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.actor_process.file.accessed_time
+          value: "0"
+        - name: __e.actor_process.file.accessor
+          value: "''"
+        - name: __e.actor_process.file.attributes
+          value: "0"
+        - name: __e.actor_process.file.company_name
+          value: "''"
+        - name: __e.actor_process.file.confidentiality
+          value: "''"
+        - name: __e.actor_process.file.confidentiality_id
+          value: "0"
+        - name: __e.actor_process.file.created_time
+          value: "0"
+        - name: __e.actor_process.file.creator
+          value: "''"
+        - name: __e.actor_process.file.desc
+          value: "''"
+        - name: __e.actor_process.file.signature.company_name
+          value: "''"
+        - name: __e.actor_process.file.signature.created_time
+          value: "0"
+        - name: __e.actor_process.file.signature.developer_uid
+          value: "''"
+        - name: __e.actor_process.file.signature.fingerprints.__e.actor_process.file.signature.fingerprints.__e.actor_process.file.signature.fingerprints.algorithm
+          value: "''"
+        - name: __e.actor_process.file.signature.fingerprints.algorithm_id
+          value: "0"
+        - name: __e.actor_process.file.signature.fingerprints.value
+          value: "''"
+        - name: __e.actor_process.file.signature.issuer_name
+          value: "''"
+        - name: __e.actor_process.file.signature.serial_number
+          value: "''"
+        - name: __e.actor_process.file.fingerprints.__e.actor_process.file.fingerprints
+          value: "''"
+        - name: __e.actor_process.file.fingerprints.__e.actor_process.file.fingerprints_id
+          value: "0"
+        - name: __e.actor_process.file.fingerprints.value
+          value: "''"
+        - name: __e.actor_process.file.mime_type
+          value: "''"
+        - name: __e.actor_process.file.modified_time
+          value: "0"
+        - name: __e.actor_process.file.modifier
+          value: "''"
+        - name: __e.actor_process.file.name
+          value: "''"
+        - name: __e.actor_process.file.owner
+          value: "''"
+        - name: __e.actor_process.file.parent_folder
+          value: "'actor_process.file.parent_folder'"
+        - name: __e.actor_process.file.path
+          value: "'actor_process.file.path'"
+        - name: __e.actor_process.file.product.feature.uid
+          value: "'actor_process.file.product.feature.uid'"
+        - name: __e.actor_process.file.product.feature.name
+          value: "'actor_process.file.product.feature.name'"
+        - name: __e.actor_process.file.product.feature.version
+          value: "'actor_process.file.product.feature.version'"
+        - name: __e.actor_process.file.product.lang
+          value: "''"
+        - name: __e.actor_process.file.product.uid
+          value: "''"
+        - name: __e.actor_process.file.product.name
+          value: "''"
+        - name: __e.actor_process.file.product.path
+          value: "''"
+        - name: __e.actor_process.file.product.version
+          value: "''"
+        - name: __e.actor_process.file.product.vendor_name
+          value: "''"
+        - name: __e.actor_process.file.security_descriptor
+          value: "''"
+        - name: __e.actor_process.file.size
+          value: "''"
+        - name: __e.actor_process.file.is_system
+          value: "true"
+        - name: __e.actor_process.file.type
+          value: "''"
+        - name: __e.actor_process.file.type_id
+          value: "0"
+        - name: __e.actor_process.file.uid
+          value: "''"
+        - name: __e.actor_process.file.version
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Active_Process - File"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.actor_process.parent_process.cmd_line
+          value: "''"
+        - name: __e.actor_process.parent_process.path
+          value: "''"
+        - name: __e.actor_process.parent_process.pid
+          value: "0"
+    groupId: O5EGFF
+    description: "Host: Active_Process - Parent_Process"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.actor_process.run_as.type
+          value: "''"
+        - name: __e.actor_process.run_as.desc
+          value: "''"
+        - name: __e.actor_process.run_as.name
+          value: "''"
+        - name: __e.actor_process.run_as.privileges
+          value: "['']"
+        - name: __e.actor_process.run_as.uid
+          value: "''"
+        - name: __e.actor_process.run_as.account_type
+          value: "''"
+        - name: __e.actor_process.run_as.account_type_id
+          value: "''"
+        - name: __e.actor_process.run_as.account_uid
+          value: "''"
+        - name: __e.actor_process.run_as.domain
+          value: "''"
+        - name: __e.actor_process.run_as.email_addr
+          value: "''"
+        - name: __e.actor_process.run_as.name
+          value: "''"
+        - name: __e.actor_process.run_as.org_uid
+          value: "''"
+        - name: __e.actor_process.run_as.session_uid
+          value: "''"
+        - name: __e.actor_process.run_as.session_uuid
+          value: "''"
+        - name: __e.actor_process.run_as.type
+          value: "''"
+        - name: __e.actor_process.run_as.type_id
+          value: "0"
+        - name: __e.actor_process.run_as.uuid
+          value: "''"
+        - name: __e.actor_process.run_as.credential_uid
+          value: "''"
+        - name: __e.actor_process.run_as.uid
+          value: "''"
+        - name: __e.actor_process.pp__cmd_line
+          value: "''"
+        - name: __e.actor_process.pp__path
+          value: "''"
+        - name: __e.actor_process.pp__pid
+          value: "0"
+        - name: __e.actor_process.file.name
+          value: "''"
+        - name: __e.actor_process.file.type
+          value: "''"
+        - name: __e.actor_process.file.type_id
+          value: "0"
+    groupId: O5EGFF
+    description: "Host: Active_Process - Run_As"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.device.autoscale_uid
+          value: "''"
+        - name: __e.device.is_compliant
+          value: "true"
+        - name: __e.device.desc
+          value: "''"
+        - name: __e.device.domain
+          value: "''"
+        - name: __e.device.uid
+          value: "''"
+        - name: __e.device.hostname
+          value: "''"
+        - name: __e.device.hypervisor
+          value: "''"
+        - name: __e.device.imei
+          value: "''"
+        - name: __e.device.ip
+          value: "''"
+        - name: __e.device.instance_uid
+          value: "''"
+        - name: __e.device.mac
+          value: "''"
+        - name: __e.device.is_managed
+          value: "true"
+        - name: __e.device.name
+          value: "''"
+        - name: __e.device.interface_uid
+          value: "''"
+        - name: __e.device.org_unit
+          value: "''"
+        - name: __e.device.is_personal
+          value: "true"
+        - name: __e.device.ref_uid
+          value: "''"
+        - name: __e.device.region
+          value: "''"
+        - name: __e.device.risk_level
+          value: "''"
+        - name: __e.device.risk_level_id
+          value: "0"
+        - name: __e.device.risk_score
+          value: "0"
+        - name: __e.device.subnet
+          value: "''"
+        - name: __e.device.subnet_uid
+          value: "''"
+        - name: __e.device.is_trusted
+          value: "true"
+        - name: __e.device.type
+          value: "''"
+        - name: __e.device.type_id
+          value: "0"
+        - name: __e.device.vlan_uid
+          value: "''"
+        - name: __e.device.vpc_uid
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Device - Base"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.device.location.city
+          value: "''"
+        - name: __e.device.location.continent
+          value: "''"
+        - name: __e.device.location.coordinates
+          value: "['','']"
+        - name: __e.device.location.country
+          value: "''"
+        - name: __e.device.location.dec
+          value: "''"
+        - name: __e.device.location.isp
+          value: "''"
+        - name: __e.device.location.is_on_premises
+          value: "true"
+        - name: __e.device.location.postal_code
+          value: "''"
+        - name: __e.device.location.provider
+          value: "''"
+        - name: __e.device.location.region
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Device - Location"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.device.groups.type
+          value: "''"
+        - name: __e.device.groups.desc
+          value: "''"
+        - name: __e.device.groups.name
+          value: "''"
+        - name: __e.device.groups.privileges
+          value: "['']"
+        - name: __e.device.groups.uid
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Device - Groups"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.device.hardware.bios_date
+          value: "''"
+        - name: __e.device.hardware.bios_manufacturer
+          value: "''"
+        - name: __e.device.hardware.bios_ver
+          value: "''"
+        - name: __e.device.hardware.cpu_bits
+          value: "0"
+        - name: __e.device.hardware.cpu_cores
+          value: "0"
+        - name: __e.device.hardware.cpu_count
+          value: "0"
+        - name: __e.device.hardware.chassis
+          value: "''"
+        - name: __e.device.hardware.cpu_speed
+          value: "0"
+        - name: __e.device.hardware.cpu_type
+          value: "''"
+        - name: __e.device.hardware.ram_size
+          value: "0"
+        - name: __e.device.hardware.serial_number
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Device - Hardware"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.device.image.uid
+          value: "''"
+        - name: __e.device.image.name
+          value: "''"
+        - name: __e.device.image.tag
+          value: "''"
+        - name: __e.device.image.labels
+          value: "['']"
+        - name: __e.device.image.path
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Device - Image"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.device.network.uid
+          value: "''"
+        - name: __e.device.network.hostname
+          value: "''"
+        - name: __e.device.network.ip
+          value: "''"
+        - name: __e.device.network.mac
+          value: "''"
+        - name: __e.device.network.name
+          value: "''"
+        - name: __e.device.network.namespace
+          value: "''"
+        - name: __e.device.network.type
+          value: "''"
+        - name: __e.device.network.type_id
+          value: "0"
+    groupId: O5EGFF
+    description: "Host: Device - Network"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: __e.device.os.cpu_bits
+          value: "0"
+        - name: __e.device.os.country
+          value: "''"
+        - name: __e.device.os.lang
+          value: "''"
+        - name: __e.device.os.name
+          value: "''"
+        - name: __e.device.os.build
+          value: "''"
+        - name: __e.device.os.edition
+          value: "''"
+        - name: __e.device.os.sp_name
+          value: "''"
+        - name: __e.device.os.sp_ver
+          value: "0"
+        - name: __e.device.os.type
+          value: "''"
+        - name: __e.device.os.type_id
+          value: "0"
+        - name: __e.device.os.version
+          value: "''"
+    groupId: O5EGFF
+    description: "Host: Device - OS"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: the below groups are for finalizing the event formats and packaging it
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: profiles
+          value: "profiles!=null ? [...Array(profiles), 'Host'] : profiles"
+        - name: profiles
+          value: "profiles==null ?  ['Host'] : profiles"
+    description: Set profile var
+    groupId: xh9wF1
+description: WIP v1.0

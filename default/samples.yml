@@ -1,0 +1,20 @@
+gVMY0D:
+  sampleName: extracted-VPC_Flow.json
+  created: 1661961521078
+  size: 51768
+  numEvents: 100
+oYLbFU:
+  sampleName: pan::traffic::processed
+  created: 1666982544706
+  size: 2049
+  numEvents: 4
+qyLYzE:
+  sampleName: pan::threat::processed
+  created: 1667400800571
+  size: 476
+  numEvents: 1
+V0OQwA:
+  sampleName: pan::system::processed
+  created: 1667401156517
+  size: 1202
+  numEvents: 4

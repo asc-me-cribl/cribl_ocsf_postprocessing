@@ -1,0 +1,11 @@
+functions:
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: WARNING
+          value: "'do not send data through the OCSF pack, please read the readme section
+            for more info'"
+      remove: []
+groups: {}
