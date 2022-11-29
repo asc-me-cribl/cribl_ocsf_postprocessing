@@ -1,0 +1,805 @@
+{
+  "activity_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "activity_id": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true
+  },
+  "app_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "category_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "category_uid": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true
+  },
+  "class_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "class_uid": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true
+  },
+  "confidence": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": false,
+    "optional": true
+  },
+  "connection_info": {
+    "fields": {
+      "boundary": {
+        "type": "STRING",
+        "optional": true
+      },
+      "boundary_id": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "direction": {
+        "type": "STRING",
+        "optional": true
+      },
+      "direction_id": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "protocol_name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "protocol_num": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "protocol_ver": {
+        "type": "STRING",
+        "optional": true
+      },
+      "protocol_ver_id": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "tcp_flags": {
+        "type": "STRING",
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      }
+    }
+  },
+  "count": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": false,
+    "optional": true
+  },
+  "data": {
+    "type": "STRING",
+    "optional": true
+  },
+  "dst_endpoint": {
+    "fields": {
+      "domain": {
+        "type": "STRING",
+        "optional": true
+      },
+      "hostname": {
+        "type": "STRING",
+        "optional": true
+      },
+      "instance_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "interface_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "intermediate_ips": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        }
+      },
+      "ip": {
+        "type": "STRING",
+        "optional": true
+      },
+      "location": {
+        "fields": {
+          "city": {
+            "type": "STRING",
+            "optional": true
+          },
+          "continent": {
+            "type": "STRING",
+            "optional": true
+          },
+          "coordinates": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "type": "DOUBLE"
+                  }
+                }
+              }
+            }
+          },
+          "country": {
+            "type": "STRING",
+            "optional": true
+          },
+          "desc": {
+            "type": "STRING",
+            "optional": true
+          },
+          "isp": {
+            "type": "STRING",
+            "optional": true
+          },
+          "is_on_premises": {
+            "type": "BOOLEAN",
+            "optional": true
+          },
+          "postal_code": {
+            "type": "STRING",
+            "optional": true
+          },
+          "provider": {
+            "type": "STRING",
+            "optional": true
+          }
+        }
+      },
+      "mac": {
+        "type": "STRING",
+        "optional": true
+      },
+      "name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "port": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "subnet_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "svc_name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "vlan_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "vpc_uid": {
+        "type": "STRING",
+        "optional": true
+      }
+    }
+  },
+  "duration": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": false,
+    "optional": true
+  },
+  "end_time": {
+    "type": "TIMESTAMP",
+    "adjustedToUtc": true,
+    "unit": "MILLIS",
+    "optional": true
+  },
+  "enrichments": {
+    "fields": {
+      "data": {
+        "type": "JSON"
+      },
+      "name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "provider": {
+        "type": "STRING",
+        "optional": true
+      },
+      "type": {
+        "type": "STRING",
+        "optional": true
+      },
+      "value": {
+        "type": "STRING",
+        "optional": true
+      }
+    }
+  },
+  "time": {
+    "type": "TIMESTAMP",
+    "adjustedToUtc": true,
+    "unit": "MILLIS"
+  },
+  "message": {
+    "type": "STRING",
+    "optional": true
+  },
+  "metadata": {
+    "fields": {
+      "labels": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        }
+      },
+      "logged_time": {
+        "type": "TIMESTAMP",
+        "adjustedToUtc": true,
+        "unit": "MILLIS",
+        "optional": true
+      },
+      "modified_time": {
+        "type": "TIMESTAMP",
+        "adjustedToUtc": true,
+        "unit": "MILLIS",
+        "optional": true
+      },
+      "product": {
+        "fields": {
+          "feature": {
+            "fields": {
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "version": {
+                "type": "STRING",
+                "optional": true
+              }
+            }
+          },
+          "lang": {
+            "type": "STRING",
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "path": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "vendor_name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "version": {
+            "type": "STRING",
+            "optional": true
+          }
+        }
+      },
+      "sequence": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "version": {
+        "type": "STRING",
+        "optional": true
+      }
+    }
+  },
+  "observables": {
+    "fields": {
+      "name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "type": {
+        "type": "STRING",
+        "optional": true
+      },
+      "type_id": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "value": {
+        "type": "STRING",
+        "optional": true
+      }
+    }
+  },
+  "proxy": {
+    "fields": {
+      "hostname": {
+        "type": "STRING",
+        "optional": true
+      },
+      "ip": {
+        "type": "STRING",
+        "optional": true
+      },
+      "port": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      }
+    }
+  },
+  "raw_data": {
+    "type": "STRING",
+    "optional": true
+  },
+  "severity": {
+    "type": "STRING",
+    "optional": true
+  },
+  "severity_id": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true
+  },
+  "src_endpoint": {
+    "fields": {
+      "domain": {
+        "type": "STRING",
+        "optional": true
+      },
+      "hostname": {
+        "type": "STRING",
+        "optional": true
+      },
+      "instance_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "interface_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "intermediate_ips": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        }
+      },
+      "ip": {
+        "type": "STRING",
+        "optional": true
+      },
+      "location": {
+        "fields": {
+          "city": {
+            "type": "STRING",
+            "optional": true
+          },
+          "continent": {
+            "type": "STRING",
+            "optional": true
+          },
+          "coordinates": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "type": "DOUBLE"
+                  }
+                }
+              }
+            }
+          },
+          "country": {
+            "type": "STRING",
+            "optional": true
+          },
+          "desc": {
+            "type": "STRING",
+            "optional": true
+          },
+          "isp": {
+            "type": "STRING",
+            "optional": true
+          },
+          "is_on_premises": {
+            "type": "BOOLEAN",
+            "optional": true
+          },
+          "postal_code": {
+            "type": "STRING",
+            "optional": true
+          },
+          "provider": {
+            "type": "STRING",
+            "optional": true
+          }
+        }
+      },
+      "mac": {
+        "type": "STRING",
+        "optional": true
+      },
+      "name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "port": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "subnet_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "svc_name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "vlan_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "vpc_uid": {
+        "type": "STRING",
+        "optional": true
+      }
+    }
+  },
+  "start_time": {
+    "type": "TIMESTAMP",
+    "adjustedToUtc": true,
+    "unit": "MILLIS",
+    "optional": true
+  },
+  "status": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_code": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_detail": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_id": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true,
+    "optional": true
+  },
+  "tls": {
+    "fields": {
+      "alert": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "certificate": {
+        "fields": {
+          "created_time": {
+            "type": "TIMESTAMP",
+            "adjustedToUtc": true,
+            "unit": "MILLIS",
+            "optional": true
+          },
+          "expiration_time": {
+            "type": "TIMESTAMP",
+            "adjustedToUtc": true,
+            "unit": "MILLIS",
+            "optional": true
+          },
+          "fingerprint": {
+            "fields": {
+              "algorithm": {
+                "type": "STRING",
+                "optional": true
+              },
+              "algorithm_id": {
+                "type": "INT",
+                "bitWidth": 16,
+                "signed": true,
+                "optional": true
+              },
+              "value": {
+                "type": "STRING",
+                "optional": true
+              }
+            }
+          },
+          "issuer_dn": {
+            "type": "STRING",
+            "optional": true
+          },
+          "serial_number": {
+            "type": "STRING",
+            "optional": true
+          },
+          "subject_dn": {
+            "type": "STRING",
+            "optional": true
+          },
+          "version": {
+            "type": "STRING",
+            "optional": true
+          }
+        }
+      },
+      "certificate_chain": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        }
+      },
+      "cipher": {
+        "type": "STRING",
+        "optional": true
+      },
+      "client_ciphers": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        }
+      },
+      "extension_list": {
+        "fields": {
+          "data": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type_id": {
+            "type": "INT",
+            "bitWidth": 16,
+            "signed": true,
+            "optional": true
+          }
+        }
+      },
+      "handshake_dur": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": false,
+        "optional": true
+      },
+      "ja3_fingerprint": {
+        "fields": {
+          "algorithm": {
+            "type": "STRING",
+            "optional": true
+          },
+          "algorithm_id": {
+            "type": "INT",
+            "bitWidth": 16,
+            "signed": true,
+            "optional": true
+          },
+          "value": {
+            "type": "STRING",
+            "optional": true
+          }
+        }
+      },
+      "ja3_string": {
+        "type": "STRING",
+        "optional": true
+      },
+      "jas3_fingerprint": {
+        "fields": {
+          "algorithm": {
+            "type": "STRING",
+            "optional": true
+          },
+          "algorithm_id": {
+            "type": "INT",
+            "bitWidth": 16,
+            "signed": true,
+            "optional": true
+          },
+          "value": {
+            "type": "STRING",
+            "optional": true
+          }
+        }
+      },
+      "jas3_string": {
+        "type": "STRING",
+        "optional": true
+      },
+      "key_length": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": true,
+        "optional": true
+      },
+      "sans": {
+        "fields": {
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type": {
+            "type": "STRING",
+            "optional": true
+          }
+        }
+      },
+      "server_ciphers": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        }
+      },
+      "sni": {
+        "type": "STRING",
+        "optional": true
+      },
+      "version": {
+        "type": "STRING",
+        "optional": true
+      }
+    }
+  },
+  "timezone_offset": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true,
+    "optional": true
+  },
+  "traffic": {
+    "fields": {
+      "bytes": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": false,
+        "optional": true
+      },
+      "bytes_in": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": false,
+        "optional": true
+      },
+      "bytes_out": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": false,
+        "optional": true
+      },
+      "packets": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": false,
+        "optional": true
+      },
+      "packets_in": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": false,
+        "optional": true
+      },
+      "packets_out": {
+        "type": "INT",
+        "bitWidth": 16,
+        "signed": false,
+        "optional": true
+      }
+    }
+  },
+  "type_uid": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true
+  },
+  "type_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "unmapped": {
+    "type": "JSON",
+    "optional": true
+    }
+}
