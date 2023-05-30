@@ -1,0 +1,384 @@
+output: default
+streamtags: []
+groups:
+  ejqL2X:
+    name: Normalize data prior to conversion
+    description: "Extract JSON to top level and remove extranious nested fields. "
+    index: 0
+  Jf2DHE:
+    name: Conversion
+    description: "Rename fields that map to schema and restructure data for parquet. "
+    index: 1
+    disabled: false
+  q1dhTd:
+    name: Calculated Fields
+    description: Functions to process calculated fields for OCSF
+    index: 2
+    disabled: false
+asyncFuncTimeout: 1000
+functions:
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: json
+      srcField: _raw
+      remove: []
+    groupId: ejqL2X
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: json
+      srcField: event
+    groupId: ejqL2X
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      remove:
+        - event
+    groupId: ejqL2X
+  - id: rename
+    filter: "true"
+    disabled: false
+    conf:
+      wildcardDepth: 5
+      rename:
+        - currentName: cdip
+          newName: dst_endpoint__ip
+        - currentName: cdport
+          newName: dst_endpoint__port
+        - currentName: csip
+          newName: src_endpoint__ip
+        - currentName: csport
+          newName: src_endpoint__port
+        - currentName: action
+          newName: activity_name
+        - currentName: proto
+          newName: connection_info__protocol_name
+        - currentName: rulelabel
+          newName: dst_endpoint__svc_name
+        - currentName: inbytes
+          newName: traffic.bytes_in
+        - currentName: outbytes
+          newName: traffic.bytes_out
+        - currentName: _raw
+          newName: raw_data
+        - currentName: datetime
+          newName: metadata__original_time
+    groupId: Jf2DHE
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: connection_info__direction_id
+          value: "0"
+        - disabled: false
+          name: metadata__version
+          value: '"Zero"'
+        - disabled: false
+          name: metadata__product__name
+          value: '"Firewall"'
+        - disabled: false
+          name: metadata__product__vendor_name
+          value: '"ZScaler"'
+    groupId: Jf2DHE
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: __tmp
+      fields:
+        - "!_*"
+        - "!cribl_*"
+        - "*"
+    description: Push to internal __tmp field
+    groupId: Jf2DHE
+  - id: code
+    filter: "true"
+    disabled: false
+    conf:
+      maxNumOfIterations: 5000
+      code: |-
+        function convertToNestedJSON(jsonString) {
+          const jsonObj = JSON.parse(jsonString);
+          const nestedObj = {};
+
+          for (let key in jsonObj) {
+            const nestedKeys = key.split('__');
+            let currentObj = nestedObj;
+
+            for (let i = 0; i < nestedKeys.length - 1; i++) {
+              const nestedKey = nestedKeys[i];
+
+              if (!(nestedKey in currentObj)) {
+                currentObj[nestedKey] = {};
+              }
+
+              currentObj = currentObj[nestedKey];
+            }
+
+            currentObj[nestedKeys[nestedKeys.length - 1]] = jsonObj[key];
+          }
+
+          return JSON.stringify(nestedObj);
+
+        }
+
+        __e._tmp = convertToNestedJSON(__e.__tmp)
+    description: Convert to nested JSON string
+    groupId: Jf2DHE
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: json
+      srcField: _tmp
+    description: Parse all the fields to top
+    groupId: Jf2DHE
+  - id: eval
+    filter: duration==undefined && start_time!=undefined && end_time!=undefined
+    disabled: false
+    conf:
+      add:
+        - name: duration
+          value: " end_time - start_time"
+    description: Calculate duration field if not mapped
+    groupId: q1dhTd
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: activity_id
+          value: '"Unknown"'
+        - name: severity
+          value: "cisco_severity == 0 ? \"Critical\" : cisco_severity == 1 ? 'Critical' :
+            cisco_severity == 2 ? 'High' : cisco_severity == 3 ? 'Fatal' :
+            cisco_severity == 4 ? \"Medium\" : cisco_severity == 5 ?\" Low\" :
+            cisco_severity == 6 ? \"Information\" : cisco_severity == 7 ?
+            \"Unknown\" : \"Unknown\"
+
+            \ "
+        - name: status_id
+          value: "0"
+        - name: status_code
+          value: "''"
+        - name: status_detail
+          value: "''"
+        - disabled: false
+          name: activity
+          value: "'Unknown'"
+      remove: []
+    description: "EDIT ME: Classification fields for {given event type}"
+    groupId: q1dhTd
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: unmapped
+      fields:
+        - aggregate
+        - avgduration
+        - department
+        - destcountry
+        - devicehostname
+        - deviceowner
+        - dnat
+        - durationms
+        - ipcat
+        - ipsrulelabel
+        - locationname
+        - numsessions
+        - nwsvc
+        - tunsport
+        - tuntype
+        - tsip
+        - user
+        - ssip
+        - ssport
+        - stateful
+        - threatcat
+        - threatname
+    groupId: q1dhTd
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: activity_id
+          value: "0"
+        - name: severity_id
+          value: "0"
+        - disabled: false
+          name: status
+          value: "status_id=='99' ? 'Other' : status || status_id=='0' ? 'Unknown' :
+            status || status_id=='1' ? 'Success' : status || status_id=='2' ?
+            'Failure' : status"
+        - name: category_name
+          value: "'Network Activity'"
+        - name: category_uid
+          value: "4"
+        - name: class_name
+          value: "'Network Activity'"
+        - name: class_uid
+          value: "4001"
+        - name: type_uid
+          value: class_uid * 100 + activity_id
+        - name: type_name
+          value: "class_name + ': ' + activity"
+        - name: time
+          value: _time
+        - name: raw_data
+          value: _raw
+          disabled: false
+        - name: app_name
+          value: sourcetype
+        - name: count
+          value: repeat_count
+      remove:
+        - _raw
+        - cribl_*
+        - repeat_count
+        - "*__*"
+        - _time
+    description: "Mapping for classification and context fields "
+    groupId: q1dhTd
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      remove:
+        - "*"
+      keep:
+        - activity_name
+        - activity_id
+        - app_name
+        - category_name
+        - category_uid
+        - class_name
+        - class_uid
+        - confidence
+        - connection_info
+        - count
+        - data
+        - dst_endpoint
+        - duration
+        - end_time
+        - enrichments
+        - time
+        - message
+        - metadata
+        - observables
+        - proxy
+        - raw_data
+        - severity
+        - severity_id
+        - src_endpoint
+        - start_time
+        - status
+        - status_code
+        - status_detail
+        - status_id
+        - tls
+        - timezone_offset
+        - traffic
+        - type_uid
+        - type_name
+        - mapped
+        - connection_info.boundary
+        - connection_info.boundary_id
+        - connection_info.uid
+        - connection_info.direction
+        - connection_info.direction_id
+        - connection_info.protocol_ver
+        - connection_info.protocol_ver_id
+        - connection_info.protocol_name
+        - connection_info.protocol_num
+        - connection_info.tcp_flags
+        - dst_endpoint.location
+        - dst_endpoint.domain
+        - dst_endpoint.hostname
+        - dst_endpoint.ip
+        - dst_endpoint.instance_uid
+        - dst_endpoint.intermediate_ips
+        - dst_endpoint.mac
+        - dst_endpoint.name
+        - dst_endpoint.interface_uid
+        - dst_endpoint.interface_name
+        - dst_endpoint.port
+        - dst_endpoint.svc_name
+        - dst_endpoint.subnet_uid
+        - dst_endpoint.uid
+        - dst_endpoint.vlan_uid
+        - dst_endpoint.vpc_uid
+        - traffic.bytes_in
+        - traffic.bytes_out
+        - traffic.packets_in
+        - traffic.packets_out
+        - traffic.bytes
+        - traffic.packets
+        - src_endpoint.location
+        - src_endpoint.domain
+        - src_endpoint.hostname
+        - src_endpoint.ip
+        - src_endpoint.instance_uid
+        - src_endpoint.intermediate_ips
+        - src_endpoint.mac
+        - src_endpoint.name
+        - src_endpoint.interface_uid
+        - src_endpoint.interface_name
+        - src_endpoint.port
+        - src_endpoint.svc_name
+        - src_endpoint.subnet_uid
+        - src_endpoint.uid
+        - rc_endpoint.vlan_uid
+        - src_endpoint.vpc_uid
+        - metadata.correlation_uid
+        - metadata.uid
+        - metadata.labels
+        - metadata.logged_time
+        - metadata.modified_time
+        - metadata.original_time
+        - metadata.processed_time
+        - metadata.product
+        - metadata.profiles
+        - metadata.sequence
+        - metadata.version
+        - metadata.product.feature
+        - metadata.product.lang
+        - metadata.product.uid
+        - metadata.product.name
+        - metadata.product.path
+        - metadata.product.version
+        - metadata.product.vendor_name
+        - metadata.product.feature.uid
+        - metadata.product.feature.name
+        - metadata.product.feature.version
+        - connection_info.protocol
+        - unmapped.*
+        - unmapped
+    description: This is the final cleanup step. We are going to keep only fields
+      that are within the
+      https://schema.ocsf.io/classes/network_activity?extensions= spec and
+      remove all others.
+    groupId: q1dhTd
+  - id: numerify
+    filter: "true"
+    disabled: null
+    conf:
+      format: none
+      ignoreFields:
+        - status_code
+        - status_detail
+      filterExpr: ""
+      digits: .nan
+    groupId: q1dhTd

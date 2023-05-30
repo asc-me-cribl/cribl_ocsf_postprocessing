@@ -18,3 +18,15 @@ V0OQwA:
   created: 1667401156517
   size: 1202
   numEvents: 4
+Y5PiFY:
+  sampleName: ZIA_Firewall_Logs
+  description: Sample ZIA Firewall Logs
+  created: 1684862413242
+  size: 36200
+  numEvents: 36
+Qf0edM:
+  sampleName: ZScaler_Web_Logs
+  description: Sample ZScaler web logs
+  created: 1684862465358
+  size: 310294
+  numEvents: 204

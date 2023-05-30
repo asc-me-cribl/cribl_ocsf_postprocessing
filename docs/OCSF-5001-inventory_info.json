@@ -1,0 +1,338 @@
+{
+  "activity_id": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "activity_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "category_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "category_uid": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "class_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "class_uid": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "confidence": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "count": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "data": {
+    "type": "JSON",
+    "optional": true
+  },
+  "duration": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "end_time": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "enrichments": {
+    "type": "LIST",
+    "fields": {
+      "list": {
+        "repeated": true,
+        "fields": {
+          "element": {
+            "fields": {
+              "data": {
+                "type": "JSON",
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "provider": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "value": {
+                "type": "STRING",
+                "optional": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "optional": true
+  },
+  "message": {
+    "type": "STRING",
+    "optional": true
+  },
+  "metadata": {
+    "fields": {
+      "correlation_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "labels": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "logged_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "modified_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "original_time": {
+        "type": "STRING",
+        "optional": true
+      },
+      "processed_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "product": {
+        "fields": {
+          "feature": {
+            "fields": {
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "version": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "lang": {
+            "type": "STRING",
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "path": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "vendor_name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "version": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "profiles": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "sequence": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "version": {
+        "type": "STRING",
+        "optional": true
+      }
+    },
+    "optional": true
+  },
+  "observables": {
+    "type": "LIST",
+    "fields": {
+      "list": {
+        "repeated": true,
+        "fields": {
+          "element": {
+            "fields": {
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "reputation": {
+                "fields": {
+                  "base_score": {
+                    "type": "DOUBLE",
+                    "optional": true
+                  },
+                  "provider": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "score": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "score_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "value": {
+                "type": "STRING",
+                "optional": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "optional": true
+  },
+  "raw_data": {
+    "type": "STRING",
+    "optional": true
+  },
+  "severity": {
+    "type": "STRING",
+    "optional": true
+  },
+  "severity_id": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "start_time": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "status": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_code": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_detail": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_id": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "time": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "timezone_offset": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "type_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "type_uid": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "unmapped": {
+    "type": "JSON",
+    "optional": true
+  }
+}

@@ -1,0 +1,2821 @@
+{
+  "activity_id": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "activity_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "actor": {
+    "fields": {
+      "authorizations": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "fields": {
+                  "decision": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "policy": {
+                    "fields": {
+                      "desc": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "group": {
+                        "fields": {
+                          "desc": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "name": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "privileges": {
+                            "type": "LIST",
+                            "fields": {
+                              "list": {
+                                "repeated": true,
+                                "fields": {
+                                  "element": {
+                                    "type": "STRING"
+                                  }
+                                }
+                              }
+                            },
+                            "optional": true
+                          },
+                          "type": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "uid": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        },
+                        "optional": true
+                      },
+                      "name": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "uid": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "version": {
+                        "type": "STRING",
+                        "optional": true
+                      }
+                    },
+                    "optional": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "idp": {
+        "fields": {
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "invoked_by": {
+        "type": "STRING",
+        "optional": true
+      },
+      "process": {
+        "fields": {
+          "cmd_line": {
+            "type": "STRING",
+            "optional": true
+          },
+          "created_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "file": {
+            "fields": {
+              "accessed_time": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "accessor": {
+                "fields": {
+                  "account_type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "account_type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "account_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "credential_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "domain": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "email_addr": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "groups": {
+                    "type": "LIST",
+                    "fields": {
+                      "list": {
+                        "repeated": true,
+                        "fields": {
+                          "element": {
+                            "fields": {
+                              "desc": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "name": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "privileges": {
+                                "type": "LIST",
+                                "fields": {
+                                  "list": {
+                                    "repeated": true,
+                                    "fields": {
+                                      "element": {
+                                        "type": "STRING"
+                                      }
+                                    }
+                                  }
+                                },
+                                "optional": true
+                              },
+                              "type": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "uid": {
+                                "type": "STRING",
+                                "optional": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "org_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "uuid": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "attributes": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "company_name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "confidentiality": {
+                "type": "STRING",
+                "optional": true
+              },
+              "confidentiality_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "created_time": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "creator": {
+                "fields": {
+                  "account_type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "account_type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "account_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "credential_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "domain": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "email_addr": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "groups": {
+                    "type": "LIST",
+                    "fields": {
+                      "list": {
+                        "repeated": true,
+                        "fields": {
+                          "element": {
+                            "fields": {
+                              "desc": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "name": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "privileges": {
+                                "type": "LIST",
+                                "fields": {
+                                  "list": {
+                                    "repeated": true,
+                                    "fields": {
+                                      "element": {
+                                        "type": "STRING"
+                                      }
+                                    }
+                                  }
+                                },
+                                "optional": true
+                              },
+                              "type": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "uid": {
+                                "type": "STRING",
+                                "optional": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "org_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "uuid": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "desc": {
+                "type": "STRING",
+                "optional": true
+              },
+              "fingerprints": {
+                "type": "LIST",
+                "fields": {
+                  "list": {
+                    "repeated": true,
+                    "fields": {
+                      "element": {
+                        "fields": {
+                          "algorithm": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "algorithm_id": {
+                            "type": "INT",
+                            "bitWidth": 32,
+                            "signed": true,
+                            "optional": true
+                          },
+                          "value": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "is_system": {
+                "type": "BOOLEAN",
+                "optional": true
+              },
+              "mime_type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "modified_time": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "modifier": {
+                "fields": {
+                  "account_type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "account_type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "account_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "credential_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "domain": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "email_addr": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "groups": {
+                    "type": "LIST",
+                    "fields": {
+                      "list": {
+                        "repeated": true,
+                        "fields": {
+                          "element": {
+                            "fields": {
+                              "desc": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "name": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "privileges": {
+                                "type": "LIST",
+                                "fields": {
+                                  "list": {
+                                    "repeated": true,
+                                    "fields": {
+                                      "element": {
+                                        "type": "STRING"
+                                      }
+                                    }
+                                  }
+                                },
+                                "optional": true
+                              },
+                              "type": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "uid": {
+                                "type": "STRING",
+                                "optional": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "org_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "uuid": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "owner": {
+                "fields": {
+                  "account_type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "account_type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "account_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "credential_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "domain": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "email_addr": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "groups": {
+                    "type": "LIST",
+                    "fields": {
+                      "list": {
+                        "repeated": true,
+                        "fields": {
+                          "element": {
+                            "fields": {
+                              "desc": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "name": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "privileges": {
+                                "type": "LIST",
+                                "fields": {
+                                  "list": {
+                                    "repeated": true,
+                                    "fields": {
+                                      "element": {
+                                        "type": "STRING"
+                                      }
+                                    }
+                                  }
+                                },
+                                "optional": true
+                              },
+                              "type": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "uid": {
+                                "type": "STRING",
+                                "optional": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "org_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "uuid": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "parent_folder": {
+                "type": "STRING",
+                "optional": true
+              },
+              "path": {
+                "type": "STRING",
+                "optional": true
+              },
+              "product": {
+                "fields": {
+                  "feature": {
+                    "fields": {
+                      "name": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "uid": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "version": {
+                        "type": "STRING",
+                        "optional": true
+                      }
+                    },
+                    "optional": true
+                  },
+                  "lang": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "path": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "vendor_name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "version": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "security_descriptor": {
+                "type": "STRING",
+                "optional": true
+              },
+              "signature": {
+                "fields": {
+                  "company_name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "created_time": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "developer_uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "fingerprints": {
+                    "type": "LIST",
+                    "fields": {
+                      "list": {
+                        "repeated": true,
+                        "fields": {
+                          "element": {
+                            "fields": {
+                              "algorithm": {
+                                "type": "STRING",
+                                "optional": true
+                              },
+                              "algorithm_id": {
+                                "type": "INT",
+                                "bitWidth": 32,
+                                "signed": true,
+                                "optional": true
+                              },
+                              "value": {
+                                "type": "STRING",
+                                "optional": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "optional": true
+                  },
+                  "issuer_name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "serial_number": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "size": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "version": {
+                "type": "STRING",
+                "optional": true
+              },
+              "xattributes": {
+                "type": "JSON",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "integrity": {
+            "type": "STRING",
+            "optional": true
+          },
+          "integrity_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "lineage": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "type": "STRING"
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "loaded_modules": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "type": "STRING"
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "parent_process": {
+            "type": "JSON",
+            "optional": true
+          },
+          "pid": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "sandbox": {
+            "type": "STRING",
+            "optional": true
+          },
+          "session": {
+            "fields": {
+              "created_time": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "credential_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "expiration_time": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "issuer": {
+                "type": "STRING",
+                "optional": true
+              },
+              "mfa": {
+                "type": "BOOLEAN",
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uuid": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "terminated_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "tid": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "user": {
+            "fields": {
+              "account_type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "account_type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "account_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "credential_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "domain": {
+                "type": "STRING",
+                "optional": true
+              },
+              "email_addr": {
+                "type": "STRING",
+                "optional": true
+              },
+              "groups": {
+                "type": "LIST",
+                "fields": {
+                  "list": {
+                    "repeated": true,
+                    "fields": {
+                      "element": {
+                        "fields": {
+                          "desc": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "name": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "privileges": {
+                            "type": "LIST",
+                            "fields": {
+                              "list": {
+                                "repeated": true,
+                                "fields": {
+                                  "element": {
+                                    "type": "STRING"
+                                  }
+                                }
+                              }
+                            },
+                            "optional": true
+                          },
+                          "type": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "uid": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "org_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uuid": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "xattributes": {
+            "type": "JSON",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "session": {
+        "fields": {
+          "created_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "credential_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "expiration_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "issuer": {
+            "type": "STRING",
+            "optional": true
+          },
+          "mfa": {
+            "type": "BOOLEAN",
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uuid": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "user": {
+        "fields": {
+          "account_type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "account_type_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "account_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "credential_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "domain": {
+            "type": "STRING",
+            "optional": true
+          },
+          "email_addr": {
+            "type": "STRING",
+            "optional": true
+          },
+          "groups": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "fields": {
+                      "desc": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "name": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "privileges": {
+                        "type": "LIST",
+                        "fields": {
+                          "list": {
+                            "repeated": true,
+                            "fields": {
+                              "element": {
+                                "type": "STRING"
+                              }
+                            }
+                          }
+                        },
+                        "optional": true
+                      },
+                      "type": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "uid": {
+                        "type": "STRING",
+                        "optional": true
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "org_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uuid": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      }
+    },
+    "optional": true
+  },
+  "actual_permissions": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "base_address": {
+    "type": "STRING",
+    "optional": true
+  },
+  "category_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "category_uid": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "class_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "class_uid": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "confidence": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "count": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "data": {
+    "type": "JSON",
+    "optional": true
+  },
+  "device": {
+    "fields": {
+      "autoscale_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "desc": {
+        "type": "STRING",
+        "optional": true
+      },
+      "domain": {
+        "type": "STRING",
+        "optional": true
+      },
+      "groups": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "fields": {
+                  "desc": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "privileges": {
+                    "type": "LIST",
+                    "fields": {
+                      "list": {
+                        "repeated": true,
+                        "fields": {
+                          "element": {
+                            "type": "STRING"
+                          }
+                        }
+                      }
+                    },
+                    "optional": true
+                  },
+                  "type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "hostname": {
+        "type": "STRING",
+        "optional": true
+      },
+      "hw_info": {
+        "fields": {
+          "bios_date": {
+            "type": "STRING",
+            "optional": true
+          },
+          "bios_manufacturer": {
+            "type": "STRING",
+            "optional": true
+          },
+          "bios_ver": {
+            "type": "STRING",
+            "optional": true
+          },
+          "chassis": {
+            "type": "STRING",
+            "optional": true
+          },
+          "cpu_bits": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "cpu_cores": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "cpu_count": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "cpu_speed": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "cpu_type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "desktop_display": {
+            "fields": {
+              "color_depth": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "physical_height": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "physical_orientation": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "physical_width": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "scale_factor": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "keyboard_info": {
+            "fields": {
+              "function_keys": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "ime": {
+                "type": "STRING",
+                "optional": true
+              },
+              "keyboard_layout": {
+                "type": "STRING",
+                "optional": true
+              },
+              "keyboard_subtype": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "keyboard_type": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "ram_size": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "serial_number": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "hypervisor": {
+        "type": "STRING",
+        "optional": true
+      },
+      "image": {
+        "fields": {
+          "labels": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "type": "STRING"
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "path": {
+            "type": "STRING",
+            "optional": true
+          },
+          "tag": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "imei": {
+        "type": "STRING",
+        "optional": true
+      },
+      "instance_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "interface_name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "interface_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "ip": {
+        "type": "STRING",
+        "optional": true
+      },
+      "is_compliant": {
+        "type": "BOOLEAN",
+        "optional": true
+      },
+      "is_managed": {
+        "type": "BOOLEAN",
+        "optional": true
+      },
+      "is_personal": {
+        "type": "BOOLEAN",
+        "optional": true
+      },
+      "is_trusted": {
+        "type": "BOOLEAN",
+        "optional": true
+      },
+      "location": {
+        "fields": {
+          "city": {
+            "type": "STRING",
+            "optional": true
+          },
+          "continent": {
+            "type": "STRING",
+            "optional": true
+          },
+          "coordinates": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "type": "DOUBLE"
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "country": {
+            "type": "STRING",
+            "optional": true
+          },
+          "desc": {
+            "type": "STRING",
+            "optional": true
+          },
+          "is_on_premises": {
+            "type": "BOOLEAN",
+            "optional": true
+          },
+          "isp": {
+            "type": "STRING",
+            "optional": true
+          },
+          "postal_code": {
+            "type": "STRING",
+            "optional": true
+          },
+          "provider": {
+            "type": "STRING",
+            "optional": true
+          },
+          "region": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "mac": {
+        "type": "STRING",
+        "optional": true
+      },
+      "name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "network_interfaces": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "fields": {
+                  "hostname": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "ip": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "mac": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "namespace": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "type_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "org_unit": {
+        "type": "STRING",
+        "optional": true
+      },
+      "os": {
+        "fields": {
+          "build": {
+            "type": "STRING",
+            "optional": true
+          },
+          "country": {
+            "type": "STRING",
+            "optional": true
+          },
+          "cpu_bits": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "edition": {
+            "type": "STRING",
+            "optional": true
+          },
+          "lang": {
+            "type": "STRING",
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "sp_name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "sp_ver": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "version": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "region": {
+        "type": "STRING",
+        "optional": true
+      },
+      "risk_level": {
+        "type": "STRING",
+        "optional": true
+      },
+      "risk_level_id": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "risk_score": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "subnet": {
+        "type": "STRING",
+        "optional": true
+      },
+      "subnet_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "type": {
+        "type": "STRING",
+        "optional": true
+      },
+      "type_id": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "uuid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "vlan_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "vpc_uid": {
+        "type": "STRING",
+        "optional": true
+      }
+    },
+    "optional": true
+  },
+  "duration": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "end_time": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "enrichments": {
+    "type": "LIST",
+    "fields": {
+      "list": {
+        "repeated": true,
+        "fields": {
+          "element": {
+            "fields": {
+              "data": {
+                "type": "JSON",
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "provider": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "value": {
+                "type": "STRING",
+                "optional": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "optional": true
+  },
+  "message": {
+    "type": "STRING",
+    "optional": true
+  },
+  "metadata": {
+    "fields": {
+      "correlation_uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "labels": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "logged_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "modified_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "original_time": {
+        "type": "STRING",
+        "optional": true
+      },
+      "processed_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "product": {
+        "fields": {
+          "feature": {
+            "fields": {
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "version": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "lang": {
+            "type": "STRING",
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "path": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "vendor_name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "version": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "profiles": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "sequence": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "version": {
+        "type": "STRING",
+        "optional": true
+      }
+    },
+    "optional": true
+  },
+  "observables": {
+    "type": "LIST",
+    "fields": {
+      "list": {
+        "repeated": true,
+        "fields": {
+          "element": {
+            "fields": {
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "reputation": {
+                "fields": {
+                  "base_score": {
+                    "type": "DOUBLE",
+                    "optional": true
+                  },
+                  "provider": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "score": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "score_id": {
+                    "type": "INT",
+                    "bitWidth": 32,
+                    "signed": true,
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "value": {
+                "type": "STRING",
+                "optional": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "optional": true
+  },
+  "process": {
+    "fields": {
+      "cmd_line": {
+        "type": "STRING",
+        "optional": true
+      },
+      "created_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "file": {
+        "fields": {
+          "accessed_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "accessor": {
+            "fields": {
+              "account_type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "account_type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "account_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "credential_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "domain": {
+                "type": "STRING",
+                "optional": true
+              },
+              "email_addr": {
+                "type": "STRING",
+                "optional": true
+              },
+              "groups": {
+                "type": "LIST",
+                "fields": {
+                  "list": {
+                    "repeated": true,
+                    "fields": {
+                      "element": {
+                        "fields": {
+                          "desc": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "name": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "privileges": {
+                            "type": "LIST",
+                            "fields": {
+                              "list": {
+                                "repeated": true,
+                                "fields": {
+                                  "element": {
+                                    "type": "STRING"
+                                  }
+                                }
+                              }
+                            },
+                            "optional": true
+                          },
+                          "type": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "uid": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "org_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uuid": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "attributes": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "company_name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "confidentiality": {
+            "type": "STRING",
+            "optional": true
+          },
+          "confidentiality_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "created_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "creator": {
+            "fields": {
+              "account_type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "account_type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "account_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "credential_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "domain": {
+                "type": "STRING",
+                "optional": true
+              },
+              "email_addr": {
+                "type": "STRING",
+                "optional": true
+              },
+              "groups": {
+                "type": "LIST",
+                "fields": {
+                  "list": {
+                    "repeated": true,
+                    "fields": {
+                      "element": {
+                        "fields": {
+                          "desc": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "name": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "privileges": {
+                            "type": "LIST",
+                            "fields": {
+                              "list": {
+                                "repeated": true,
+                                "fields": {
+                                  "element": {
+                                    "type": "STRING"
+                                  }
+                                }
+                              }
+                            },
+                            "optional": true
+                          },
+                          "type": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "uid": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "org_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uuid": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "desc": {
+            "type": "STRING",
+            "optional": true
+          },
+          "fingerprints": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "fields": {
+                      "algorithm": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "algorithm_id": {
+                        "type": "INT",
+                        "bitWidth": 32,
+                        "signed": true,
+                        "optional": true
+                      },
+                      "value": {
+                        "type": "STRING",
+                        "optional": true
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "is_system": {
+            "type": "BOOLEAN",
+            "optional": true
+          },
+          "mime_type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "modified_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "modifier": {
+            "fields": {
+              "account_type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "account_type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "account_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "credential_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "domain": {
+                "type": "STRING",
+                "optional": true
+              },
+              "email_addr": {
+                "type": "STRING",
+                "optional": true
+              },
+              "groups": {
+                "type": "LIST",
+                "fields": {
+                  "list": {
+                    "repeated": true,
+                    "fields": {
+                      "element": {
+                        "fields": {
+                          "desc": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "name": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "privileges": {
+                            "type": "LIST",
+                            "fields": {
+                              "list": {
+                                "repeated": true,
+                                "fields": {
+                                  "element": {
+                                    "type": "STRING"
+                                  }
+                                }
+                              }
+                            },
+                            "optional": true
+                          },
+                          "type": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "uid": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "org_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uuid": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "owner": {
+            "fields": {
+              "account_type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "account_type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "account_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "credential_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "domain": {
+                "type": "STRING",
+                "optional": true
+              },
+              "email_addr": {
+                "type": "STRING",
+                "optional": true
+              },
+              "groups": {
+                "type": "LIST",
+                "fields": {
+                  "list": {
+                    "repeated": true,
+                    "fields": {
+                      "element": {
+                        "fields": {
+                          "desc": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "name": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "privileges": {
+                            "type": "LIST",
+                            "fields": {
+                              "list": {
+                                "repeated": true,
+                                "fields": {
+                                  "element": {
+                                    "type": "STRING"
+                                  }
+                                }
+                              }
+                            },
+                            "optional": true
+                          },
+                          "type": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "uid": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "org_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type": {
+                "type": "STRING",
+                "optional": true
+              },
+              "type_id": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uuid": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "parent_folder": {
+            "type": "STRING",
+            "optional": true
+          },
+          "path": {
+            "type": "STRING",
+            "optional": true
+          },
+          "product": {
+            "fields": {
+              "feature": {
+                "fields": {
+                  "name": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "uid": {
+                    "type": "STRING",
+                    "optional": true
+                  },
+                  "version": {
+                    "type": "STRING",
+                    "optional": true
+                  }
+                },
+                "optional": true
+              },
+              "lang": {
+                "type": "STRING",
+                "optional": true
+              },
+              "name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "path": {
+                "type": "STRING",
+                "optional": true
+              },
+              "uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "vendor_name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "version": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "security_descriptor": {
+            "type": "STRING",
+            "optional": true
+          },
+          "signature": {
+            "fields": {
+              "company_name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "created_time": {
+                "type": "INT",
+                "bitWidth": 32,
+                "signed": true,
+                "optional": true
+              },
+              "developer_uid": {
+                "type": "STRING",
+                "optional": true
+              },
+              "fingerprints": {
+                "type": "LIST",
+                "fields": {
+                  "list": {
+                    "repeated": true,
+                    "fields": {
+                      "element": {
+                        "fields": {
+                          "algorithm": {
+                            "type": "STRING",
+                            "optional": true
+                          },
+                          "algorithm_id": {
+                            "type": "INT",
+                            "bitWidth": 32,
+                            "signed": true,
+                            "optional": true
+                          },
+                          "value": {
+                            "type": "STRING",
+                            "optional": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "issuer_name": {
+                "type": "STRING",
+                "optional": true
+              },
+              "serial_number": {
+                "type": "STRING",
+                "optional": true
+              }
+            },
+            "optional": true
+          },
+          "size": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "version": {
+            "type": "STRING",
+            "optional": true
+          },
+          "xattributes": {
+            "type": "JSON",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "integrity": {
+        "type": "STRING",
+        "optional": true
+      },
+      "integrity_id": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "lineage": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "loaded_modules": {
+        "type": "LIST",
+        "fields": {
+          "list": {
+            "repeated": true,
+            "fields": {
+              "element": {
+                "type": "STRING"
+              }
+            }
+          }
+        },
+        "optional": true
+      },
+      "name": {
+        "type": "STRING",
+        "optional": true
+      },
+      "parent_process": {
+        "type": "JSON",
+        "optional": true
+      },
+      "pid": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "sandbox": {
+        "type": "STRING",
+        "optional": true
+      },
+      "session": {
+        "fields": {
+          "created_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "credential_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "expiration_time": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "issuer": {
+            "type": "STRING",
+            "optional": true
+          },
+          "mfa": {
+            "type": "BOOLEAN",
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uuid": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "terminated_time": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "tid": {
+        "type": "INT",
+        "bitWidth": 32,
+        "signed": true,
+        "optional": true
+      },
+      "uid": {
+        "type": "STRING",
+        "optional": true
+      },
+      "user": {
+        "fields": {
+          "account_type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "account_type_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "account_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "credential_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "domain": {
+            "type": "STRING",
+            "optional": true
+          },
+          "email_addr": {
+            "type": "STRING",
+            "optional": true
+          },
+          "groups": {
+            "type": "LIST",
+            "fields": {
+              "list": {
+                "repeated": true,
+                "fields": {
+                  "element": {
+                    "fields": {
+                      "desc": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "name": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "privileges": {
+                        "type": "LIST",
+                        "fields": {
+                          "list": {
+                            "repeated": true,
+                            "fields": {
+                              "element": {
+                                "type": "STRING"
+                              }
+                            }
+                          }
+                        },
+                        "optional": true
+                      },
+                      "type": {
+                        "type": "STRING",
+                        "optional": true
+                      },
+                      "uid": {
+                        "type": "STRING",
+                        "optional": true
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "name": {
+            "type": "STRING",
+            "optional": true
+          },
+          "org_uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type": {
+            "type": "STRING",
+            "optional": true
+          },
+          "type_id": {
+            "type": "INT",
+            "bitWidth": 32,
+            "signed": true,
+            "optional": true
+          },
+          "uid": {
+            "type": "STRING",
+            "optional": true
+          },
+          "uuid": {
+            "type": "STRING",
+            "optional": true
+          }
+        },
+        "optional": true
+      },
+      "xattributes": {
+        "type": "JSON",
+        "optional": true
+      }
+    },
+    "optional": true
+  },
+  "raw_data": {
+    "type": "STRING",
+    "optional": true
+  },
+  "requested_permissions": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "severity": {
+    "type": "STRING",
+    "optional": true
+  },
+  "severity_id": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "size": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "start_time": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "status": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_code": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_detail": {
+    "type": "STRING",
+    "optional": true
+  },
+  "status_id": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "time": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "timezone_offset": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "type_name": {
+    "type": "STRING",
+    "optional": true
+  },
+  "type_uid": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "unmapped": {
+    "type": "JSON",
+    "optional": true
+  }
+}

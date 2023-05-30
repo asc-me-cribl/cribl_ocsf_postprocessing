@@ -3,7 +3,7 @@ streamtags:
   - OCSF
 groups:
   MklQaW:
-    name: Demo Preper
+    name: Data Preper
     index: 0
   WInbwq:
     name: "EDIT ME: Event Classification"

@@ -1,0 +1,446 @@
+output: default
+streamtags: []
+groups:
+  g48ef8:
+    name: Normalize data prior to conversion
+    description: "Extract JSON to top level and remove extranious nested fields. "
+    index: 0
+  gP6K1Q:
+    name: Conversion
+    description: Convert data into OCSF Schema
+    index: 1
+  5EsWFY:
+    name: Calculated Fields
+    description: Calculate Classification fields and cleanup
+    disabled: false
+    index: 2
+asyncFuncTimeout: 1000
+functions:
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: json
+      srcField: _raw
+      cleanFields: false
+      allowedKeyChars: []
+      allowedValueChars: []
+    groupId: g48ef8
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: json
+      srcField: event
+    groupId: g48ef8
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      remove:
+        - event
+    groupId: g48ef8
+  - id: rename
+    filter: "true"
+    disabled: null
+    conf:
+      wildcardDepth: 5
+      rename:
+        - newName: dst_endpoint__ip
+          currentName: serverip
+        - currentName: action
+          newName: activity_name
+        - currentName: ClientIP
+          newName: src_endpoint__ip
+        - currentName: url
+          newName: URL
+        - newName: metadata__product__vendor_name
+          currentName: vendor
+        - currentName: datetime
+          newName: time
+        - currentName: cdip
+          newName: dst_endpoint__ip
+        - currentName: cdport
+          newName: dst_endpoint__port
+        - currentName: csip
+          newName: src_endpoint__ip
+        - currentName: csport
+          newName: src_endpoint__port
+        - currentName: protocol
+          newName: connection_info.protocol_num
+        - currentName: _raw
+          newName: raw_data
+        - currentName: useragent
+          newName: user_agent
+        - currentName: refererURL
+          newName: referrer
+        - currentName: requestmethod
+          newName: http_method
+        - currentName: event_id
+          newName: uid
+        - currentName: status
+          newName: http_status
+    groupId: gP6K1Q
+  - id: regex_extract
+    filter: "true"
+    disabled: null
+    conf:
+      source: URL
+      iterations: 100
+      overwrite: false
+      regex: /(?<http_request__url__hostname>.[^\/]+)(?<http_request__url__path>.*)/
+    groupId: gP6K1Q
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: connection_info__direction_id
+          value: "0"
+        - disabled: false
+          name: metadata__version
+          value: '"Zero"'
+        - disabled: false
+          name: metadata__product__name
+          value: '"ZIA"'
+        - disabled: false
+          name: metadata__product__vendor_name
+          value: '"ZScaler"'
+        - disabled: false
+          name: http_request__url__text
+          value: URL
+        - disabled: false
+          name: http_response__code
+          value: http_status
+    groupId: gP6K1Q
+  - id: mask
+    filter: "true"
+    disabled: null
+    conf:
+      rules:
+        - disabled: false
+          matchRegex: /NA/
+          replaceExpr: "0"
+      fields:
+        - http_response__code
+      depth: 5
+    groupId: gP6K1Q
+  - id: numerify
+    filter: "true"
+    disabled: null
+    conf:
+      format: none
+      ignoreFields: []
+      filterExpr: ""
+      digits: .nan
+    groupId: gP6K1Q
+  - id: mask
+    filter: "true"
+    disabled: null
+    conf:
+      rules:
+        - disabled: false
+          matchRegex: /0/
+          replaceExpr: '""'
+      fields:
+        - http_request__url__path
+      depth: 5
+    groupId: gP6K1Q
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: __tmp
+      fields:
+        - "!_*"
+        - "!cribl_*"
+        - "*"
+    description: Push to internal __tmp field
+    groupId: gP6K1Q
+  - id: code
+    filter: "true"
+    disabled: false
+    conf:
+      maxNumOfIterations: 5000
+      code: |-
+        function convertToNestedJSON(jsonString) {
+          const jsonObj = JSON.parse(jsonString);
+          const nestedObj = {};
+
+          for (let key in jsonObj) {
+            const nestedKeys = key.split('__');
+            let currentObj = nestedObj;
+
+            for (let i = 0; i < nestedKeys.length - 1; i++) {
+              const nestedKey = nestedKeys[i];
+
+              if (!(nestedKey in currentObj)) {
+                currentObj[nestedKey] = {};
+              }
+
+              currentObj = currentObj[nestedKey];
+            }
+
+            currentObj[nestedKeys[nestedKeys.length - 1]] = jsonObj[key];
+          }
+
+          return JSON.stringify(nestedObj);
+
+        }
+
+        __e._tmp = convertToNestedJSON(__e.__tmp)
+    description: Convert to nested JSON string
+    groupId: gP6K1Q
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: json
+      srcField: _tmp
+    description: Parse all the fields to top
+    groupId: gP6K1Q
+  - id: eval
+    filter: duration==undefined && start_time!=undefined && end_time!=undefined
+    disabled: false
+    conf:
+      add:
+        - name: duration
+          value: " end_time - start_time"
+    description: Calculate duration field if not mapped
+    groupId: 5EsWFY
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - disabled: false
+          name: category_name
+          value: '"Network Activity"'
+        - disabled: false
+          name: category_uid
+          value: "4"
+        - disabled: false
+          name: class_name
+          value: '"HTTP Activity"'
+        - disabled: false
+          name: class_uid
+          value: "4002"
+        - disabled: false
+          name: severity_id
+          value: "0"
+        - disabled: false
+          name: severity
+          value: '"Unknown"'
+    groupId: 5EsWFY
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: unmapped
+      fields:
+        - appclass
+        - appname
+        - bwthrottle
+        - clientpublicIP
+        - clienttranstime
+        - contenttype
+        - department
+        - devicehostname
+        - deviceowner
+        - dlpdictionaries
+        - dlpengine
+        - fileclass
+        - filetype
+        - hostname
+        - location
+        - pagerisk
+        - product
+        - reason
+        - requestsize
+        - responsesize
+        - servertranstime
+        - threatcategory
+        - threatname
+        - transactionsize
+        - unscannabletype
+        - urlcategory
+        - urlclass
+        - urlsupercategory
+        - user
+    groupId: 5EsWFY
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: activity_id
+          value: "0"
+        - name: severity_id
+          value: "0"
+        - disabled: false
+          name: status
+          value: "status_id=='99' ? 'Other' : status || status_id=='0' ? 'Unknown' :
+            status || status_id=='1' ? 'Success' : status || status_id=='2' ?
+            'Failure' : status"
+        - name: category_name
+          value: "'Network Activity'"
+        - name: category_uid
+          value: "4"
+        - name: class_name
+          value: "'HTTP Activity'"
+        - name: class_uid
+          value: "4002"
+        - name: type_uid
+          value: class_uid * 100 + activity_id
+        - name: type_name
+          value: "class_name + ': ' + activity"
+        - name: time
+          value: _time
+        - name: raw_data
+          value: _raw
+          disabled: false
+        - name: app_name
+          value: sourcetype
+        - name: count
+          value: repeat_count
+      remove:
+        - _raw
+        - cribl_*
+        - repeat_count
+        - "*__*"
+        - _time
+    description: "Mapping for classification and context fields "
+    groupId: 5EsWFY
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      remove:
+        - "*"
+      keep:
+        - activity_name
+        - activity_id
+        - app_name
+        - category_name
+        - category_uid
+        - class_name
+        - class_uid
+        - confidence
+        - connection_info
+        - count
+        - data
+        - dst_endpoint
+        - duration
+        - end_time
+        - enrichments
+        - time
+        - message
+        - metadata
+        - observables
+        - proxy
+        - raw_data
+        - severity
+        - severity_id
+        - src_endpoint
+        - start_time
+        - status
+        - status_code
+        - status_detail
+        - status_id
+        - tls
+        - timezone_offset
+        - traffic
+        - type_uid
+        - type_name
+        - mapped
+        - connection_info.boundary
+        - connection_info.boundary_id
+        - connection_info.uid
+        - connection_info.direction
+        - connection_info.direction_id
+        - connection_info.protocol_ver
+        - connection_info.protocol_ver_id
+        - connection_info.protocol_name
+        - connection_info.protocol_num
+        - connection_info.tcp_flags
+        - dst_endpoint.location
+        - dst_endpoint.domain
+        - dst_endpoint.hostname
+        - dst_endpoint.ip
+        - dst_endpoint.instance_uid
+        - dst_endpoint.intermediate_ips
+        - dst_endpoint.mac
+        - dst_endpoint.name
+        - dst_endpoint.interface_uid
+        - dst_endpoint.interface_name
+        - dst_endpoint.port
+        - dst_endpoint.svc_name
+        - dst_endpoint.subnet_uid
+        - dst_endpoint.uid
+        - dst_endpoint.vlan_uid
+        - dst_endpoint.vpc_uid
+        - traffic.bytes_in
+        - traffic.bytes_out
+        - traffic.packets_in
+        - traffic.packets_out
+        - traffic.bytes
+        - traffic.packets
+        - src_endpoint.location
+        - src_endpoint.domain
+        - src_endpoint.hostname
+        - src_endpoint.ip
+        - src_endpoint.instance_uid
+        - src_endpoint.intermediate_ips
+        - src_endpoint.mac
+        - src_endpoint.name
+        - src_endpoint.interface_uid
+        - src_endpoint.interface_name
+        - src_endpoint.port
+        - src_endpoint.svc_name
+        - src_endpoint.subnet_uid
+        - src_endpoint.uid
+        - rc_endpoint.vlan_uid
+        - src_endpoint.vpc_uid
+        - metadata.correlation_uid
+        - metadata.uid
+        - metadata.labels
+        - metadata.logged_time
+        - metadata.modified_time
+        - metadata.original_time
+        - metadata.processed_time
+        - metadata.product
+        - metadata.profiles
+        - metadata.sequence
+        - metadata.version
+        - metadata.product.feature
+        - metadata.product.lang
+        - metadata.product.uid
+        - metadata.product.name
+        - metadata.product.path
+        - metadata.product.version
+        - metadata.product.vendor_name
+        - metadata.product.feature.uid
+        - metadata.product.feature.name
+        - metadata.product.feature.version
+        - connection_info.protocol
+        - unmapped.*
+        - unmapped
+        - http_request
+        - http_response
+        - http_request.url
+        - http_response.code
+        - http_request.url.hostname
+        - http_request.url.path
+        - http_request.url.text
+        - http_request.*
+    description: This is the final cleanup step. We are going to keep only fields
+      that are within the
+      https://schema.ocsf.io/classes/network_activity?extensions= spec and
+      remove all others.
+    groupId: 5EsWFY

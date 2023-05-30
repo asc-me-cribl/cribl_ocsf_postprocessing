@@ -1,0 +1,56 @@
+OCSF-1001-file_activity_json_schema_validation.json:
+  ? description
+OCSF-1002-kernel_extension_json_schema_validation.json:
+  ? description
+OCSF-1003-kernel_activity_json_schema_validation.json:
+  ? description
+OCSF-1004-memory_activity_json_schema_validation.json:
+  ? description
+OCSF-1005-module_activity_json_schema_validation.json:
+  ? description
+OCSF-1006-scheduled_job_activity_json_schema_validation.json:
+  ? description
+OCSF-1007-process_activity_json_schema_validation.json:
+  ? description
+OCSF-1008-registry_key_activity_json_schema_validation.json:
+  ? description
+OCSF-1009-registry_value_activity_json_schema_validation.json:
+  ? description
+OCSF-1010-resource_activity_json_schema_validation.json:
+  ? description
+OCSF-2001-security_finding_json_schema_validation.json:
+  ? description
+OCSF-3001-account_change_json_schema_validation.json:
+  ? description
+OCSF-3002-authentication_json_schema_validation.json:
+  ? description
+OCSF-3003-authorization_json_schema_validation.json:
+  ? description
+OCSF-3004-entity_management_json_schema_validation.json:
+  ? description
+OCSF-3005-api_activity_json_schema_validation.json:
+  ? description
+OCSF-3006-access_activity_json_schema_validation.json:
+  ? description
+OCSF-4001-network_activity_json_schema_validation.json:
+  ? description
+OCSF-4002-http_activity_json_schema_validation.json:
+  ? description
+OCSF-4003-dns_activity_json_schema_validation.json:
+  ? description
+OCSF-4004-dhcp_activity_json_schema_validation.json:
+  ? description
+OCSF-4005-rdp_activity_json_schema_validation.json:
+  ? description
+OCSF-4006-smb_activity_json_schema_validation.json:
+  ? description
+OCSF-4007-ssh_activity_json_schema_validation.json:
+  ? description
+OCSF-4008-ftp_activity_json_schema_validation.json:
+  ? description
+OCSF-4009-email_activity_json_schema_validation.json:
+  ? description
+OCSF-5001-inventory_info_json_schema_validation.json:
+  ? description
+OCSF-5002-config_state_json_schema_validation.json:
+  ? description

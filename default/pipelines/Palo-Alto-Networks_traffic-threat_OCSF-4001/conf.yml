@@ -1,0 +1,680 @@
+output: default
+streamtags:
+  - OCSF
+groups:
+  MklQaW:
+    name: Data Preper
+    index: 1
+    description: parse and assign fields to the OCSF field structure
+  u6rXXF:
+    name: Calculated fields
+    description: adds calculated fields, preps data for sending
+    index: 2
+    disabled: false
+  LFeGCJ:
+    name: Schema valdation
+    disabled: false
+    index: 4
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: 'This pipeline maps "Network Activity" data to OCSF as defined in:
+        https://schema.ocsf.io/classes/network_activity?extensions='
+  - id: serde
+    filter: sourcetype=='pan:traffic'
+    disabled: null
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      fields:
+        - future_use1
+        - receive_time
+        - serial_number
+        - type
+        - log_subtype
+        - version
+        - generated_time
+        - src_ip
+        - dest_ip
+        - src_translated_ip
+        - dest_translated_ip
+        - rule
+        - src_user
+        - dest_user
+        - app
+        - vsys
+        - src_zone
+        - dest_zone
+        - src_interface
+        - dest_interface
+        - log_forwarding_profile
+        - future_use3
+        - session_id
+        - repeat_count
+        - src_port
+        - dest_port
+        - src_translated_port
+        - dest_translated_port
+        - session_flags
+        - transport
+        - action
+        - bytes
+        - bytes_out
+        - bytes_in
+        - packets
+        - start_time
+        - duration
+        - http_category
+        - future_use4
+        - sequence_number
+        - action_flags
+        - src_location
+        - dest_location
+        - future_use5
+        - packets_out
+        - packets_in
+        - session_end_reason
+        - devicegroup_level1
+        - devicegroup_level2
+        - devicegroup_level3
+        - devicegroup_level4
+        - vsys_name
+        - dvc_name
+        - action_source
+        - src_vm
+        - dest_vm
+        - tunnel_id
+        - tunnel_monitor_tag
+        - tunnel_session_id
+        - tunnel_start_time
+        - tunnel_type
+        - sctp_assoc_id
+        - sctp_chunks
+        - sctp_chunks_sent
+        - sctp_chunks_received
+        - rule_uuid
+        - http2_connection
+        - link_change_count
+        - policy_id
+        - link_switches
+        - sdwan_cluster
+        - sdwan_device_type
+        - sdwan_cluster_type
+        - sdwan_site
+        - dynusergroup_name
+        - xff_ip
+        - src_dvc_category
+        - src_dvc_profile
+        - src_dvc_model
+        - src_dvc_vendor
+        - src_dvc_os_family
+        - src_dvc_os_version
+        - src_dvc_host
+        - src_dvc_mac
+        - dest_dvc_category
+        - dest_dvc_profile
+        - dest_dvc_model
+        - dest_dvc_vendor
+        - dest_dvc_os_family
+        - dest_dvc_os_version
+        - dest_dvc_host
+        - dest_dvc_mac
+        - container_id
+        - pod_namespace
+        - pod_name
+        - src_edl
+        - dest_edl
+        - host_id
+        - dvc_serial_number
+        - src_dag
+        - dest_dag
+        - session_owner
+        - high_res_timestamp
+        - nsdsai_sst
+        - nsdsai_sd
+        - app_subcategory
+        - app_category
+        - app_technology
+        - app_risk
+        - app_characteristic
+        - app_container
+        - app_tunneled
+        - app_saas
+        - app_sanction
+        - offloaded
+      remove:
+        - raw_category
+        - misc
+        - vsys
+        - "*_translated_port*"
+        - direction
+        - device*
+    groupId: MklQaW
+    description: parse the csv
+  - id: serde
+    filter: sourcetype=='pan:threat'
+    disabled: null
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      fields:
+        - future_use1
+        - receive_time
+        - serial_number
+        - type
+        - log_subtype
+        - version
+        - generated_time
+        - src_ip
+        - dest_ip
+        - src_translated_ip
+        - dest_translated_ip
+        - rule
+        - src_user
+        - dest_user
+        - app
+        - vsys
+        - src_zone
+        - dest_zone
+        - src_interface
+        - dest_interface
+        - log_forwarding_profile
+        - future_use3
+        - session_id
+        - repeat_count
+        - src_port
+        - dest_port
+        - src_translated_port
+        - dest_translated_port
+        - session_flags
+        - transport
+        - action
+        - misc
+        - threat
+        - raw_category
+        - severity
+        - direction
+        - sequence_number
+        - action_flags
+        - src_location
+        - dest_location
+        - future_use4
+        - content_type
+        - pcap_id
+        - file_hash
+        - cloud_address
+        - url_index
+        - user_agent
+        - file_type
+        - xff
+        - referrer
+        - sender
+        - subject
+        - recipient
+        - report_id
+        - devicegroup_level1
+        - devicegroup_level2
+        - devicegroup_level3
+        - devicegroup_level4
+        - vsys_name
+        - dvc_name
+        - future_use5
+        - src_vm
+        - dest_vm
+        - http_method
+        - tunnel_id
+        - tunnel_monitor_tag
+        - tunnel_session_id
+        - tunnel_start_time
+        - tunnel_type
+        - threat_category
+        - content_version
+        - future_use6
+        - sctp_assoc_id
+        - payload_protocol_id
+        - http_headers
+        - url_category_list
+        - rule_uuid
+        - http2_connection
+        - dynusergroup_name
+        - xff_ip
+        - src_dvc_category
+        - src_dvc_profile
+        - src_dvc_model
+        - src_dvc_vendor
+        - src_dvc_os_family
+        - src_dvc_os_version
+        - src_dvc_host
+        - src_dvc_mac
+        - dest_dvc_category
+        - dest_dvc_profile
+        - dest_dvc_model
+        - dest_dvc_vendor
+        - dest_dvc_os_family
+        - dest_dvc_os_version
+        - dest_dvc_host
+        - dest_dvc_mac
+        - container_id
+        - pod_namespace
+        - pod_name
+        - src_edl
+        - dest_edl
+        - host_id
+        - dvc_serial_number
+        - domain_edl
+        - src_dag
+        - dest_dag
+        - partial_hash
+        - high_res_timestmp
+        - reason
+        - justification
+        - nssai_sst
+        - app_subcategory
+        - app_category
+        - app_technology
+        - app_risk
+        - app_characteristic
+        - app_container
+        - app_saas
+        - app_sanction
+        - app_tunneled
+        - cloud_report_id
+      remove:
+        - raw_category
+        - misc
+        - log_*
+        - vsys
+        - "*_translated_port*"
+        - direction
+    groupId: MklQaW
+    description: parse the csv
+  - id: rename
+    filter: "true"
+    disabled: false
+    conf:
+      wildcardDepth: 5
+      rename:
+        - currentName: dest_ip
+          newName: dst_endpoint__ip
+        - currentName: dest_interface
+          newName: dst_endpoint__interface_uid
+        - currentName: dest_port
+          newName: dst_endpoint__port
+        - currentName: rule
+          newName: dst_endpoint__svc_name
+        - currentName: src_ip
+          newName: src_endpoint__ip
+        - currentName: src_interface
+          newName: src_endpoint__interface_uid
+        - currentName: src_port
+          newName: src_endpoint__port
+        - currentName: serial_number
+          newName: metadata__product__uid
+        - currentName: version
+          newName: metadata__product__version
+        - currentName: session_id
+          newName: connection_info__uid
+        - currentName: dest_zone
+          newName: dst_endpoint__vlan_uid
+        - currentName: src_zone
+          newName: src_endpoint__vlan_uid
+        - currentName: type
+          newName: metadata__product__feature__name
+        - currentName: sequence_number
+          newName: metadata__sequence
+        - currentName: bytes_in
+          newName: traffic__bytes_in
+        - currentName: bytes_out
+          newName: traffic__bytes_out
+        - currentName: packets_in
+          newName: traffic__packets_in
+        - currentName: packets_out
+          newName: traffic__packets_out
+        - currentName: bytes
+          newName: traffic__bytes
+        - currentName: packets
+          newName: traffic__packets
+        - currentName: repeat_count
+          newName: count
+    groupId: MklQaW
+    description: rename fields to "__" notation OCSF format
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: __tmp
+      fields:
+        - "!_*"
+        - "!cribl*"
+        - "*"
+    description: Push to internal __tmp field
+    groupId: MklQaW
+  - id: code
+    filter: "true"
+    disabled: false
+    conf:
+      maxNumOfIterations: 5000
+      code: |-
+        function convertToNestedJSON(jsonString) {
+          const jsonObj = JSON.parse(jsonString);
+          const nestedObj = {};
+
+          for (let key in jsonObj) {
+            const nestedKeys = key.split('__');
+            let currentObj = nestedObj;
+
+            for (let i = 0; i < nestedKeys.length - 1; i++) {
+              const nestedKey = nestedKeys[i];
+
+              if (!(nestedKey in currentObj)) {
+                currentObj[nestedKey] = {};
+              }
+
+              currentObj = currentObj[nestedKey];
+            }
+
+            currentObj[nestedKeys[nestedKeys.length - 1]] = jsonObj[key];
+          }
+
+          return JSON.stringify(nestedObj);
+
+        }
+
+        __e._tmp = convertToNestedJSON(__e.__tmp)
+    description: Convert to nested JSON string
+    groupId: MklQaW
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: json
+      srcField: _tmp
+    groupId: MklQaW
+    description: parse the json structure we created
+  - id: eval
+    filter: sourcetype=='pan:threat'
+    disabled: false
+    conf:
+      add:
+        - name: activity_id
+          value: "99"
+        - name: severity_id
+          value: "action_flags=='0' ? '1' : severity_id "
+        - name: status_id
+          value: "99"
+        - name: status_code
+          value: action
+        - name: status_detail
+          value: "threat + ': ' + app + ': ' + content_type"
+      remove:
+        - threat
+        - app
+        - content_type
+        - action
+        - action_flags
+    description: Classification fields for PAN:Threat
+    groupId: MklQaW
+  - id: eval
+    filter: sourcetype=='pan:traffic'
+    disabled: false
+    conf:
+      add:
+        - name: activity_id
+          value: "log_subtype=='' ? '0' : activity_id || log_subtype=='start' ? '1' :
+            activity_id || log_subtype=='end' ? '2' : activity_id ||
+            log_subtype=='drop' ? '5' : activity_id || log_subtype=='deny' ? '5'
+            : activity_id "
+        - name: severity_id
+          value: "sourcetype=='pan:traffic' ? '1' : severity_id"
+        - name: status_id
+          value: "action=='allow' ? '1' : status_id"
+        - name: status_code
+          value: "action_flags "
+          disabled: false
+        - name: status_detail
+          value: 'action_source + ": " + session_end_reason'
+      remove:
+        - action*
+        - app
+        - session_end_reason
+        - app_name
+    description: Classification fields for PAN:Traffic
+    groupId: MklQaW
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: connection_info.direction_id
+          value: "src_endpoint.vlan_uid.startsWith('untrust') &&
+            dst_endpoint.vlan_uid.startsWith('trust') ? '1' :
+            connection_info.direction_id ||
+            src_endpoint.vlan_uid.startsWith('trust') &&
+            dst_endpoint.vlan_uid.startsWith('untrust') ? '2' :
+            connection_info.direction_id ||
+            src_endpoint.vlan_uid.startsWith('trust') &&
+            dst_endpoint.vlan_uid.startsWith('trust') ? '3' :
+            connection_info.direction_id || src_endpoint.vlan_uid=='' ? '0' :
+            connection_info.direction_id || dst_endpoint.vlan_uid=='' ? '0' :
+            connection_info.direction_id ||
+            src_endpoint.vlan_uid.startsWith('Untrust') &&
+            dst_endpoint.vlan_uid.startsWith('Trust') ? '1' :
+            connection_info.direction_id ||
+            src_endpoint.vlan_uid.startsWith('Trust') &&
+            dst_endpoint.vlan_uid.startsWith('Untrust') ? '2' :
+            connection_info.direction_id ||
+            src_endpoint.vlan_uid.startsWith('Trust') &&
+            dst_endpoint.vlan_uid.startsWith('Trust') ? '3' :
+            connection_info.direction_id"
+        - name: connection_info.direction
+          value: "connection_info.direction_id=='99' ? 'Other' : connection_info.direction
+            || connection_info.direction_id=='0' ? 'Unknown' :
+            __e.connection_info.direction ||
+            __e.connection_info.direction_id=='1' ? 'Inbound' :
+            __e.connection_info.direction ||
+            __e.connection_info.direction_id=='2' ? 'Outbound' :
+            __e.connection_info.direction ||
+            __e.connection_info.direction_id=='3' ? 'Lateral' :
+            __e.connection_info.direction"
+        - name: connection_info.protocol_num
+          value: "transport=='tcp' ? '6' : connection_info.protocol_num ||
+            transport=='udp' ? '17' : __e.connection_info.protocol_num ||
+            transport=='rdp' ? '27' : __e.connection_info.protocol_num "
+          disabled: false
+        - disabled: false
+          value: "connection_info.boundary_id=='-1' ? 'Other' : connection_info.boundary
+            || connection_info.boundary_id=='0' ? 'Unknown' :
+            connection_info.boundary || connection_info.boundary_id=='1' ?
+            'Localhost' : connection_info.boundary ||
+            connection_info.boundary_id=='2' ? 'Internal' :
+            connection_info.boundary || connection_info.boundary_id=='3' ?
+            'External' : connection_info.boundary ||
+            connection_info.boundary_id=='4' ? 'Same VPC' :
+            connection_info.boundary || connection_info.boundary_id=='5' ?
+            'Internat/VPC Gateway' : connection_info.boundary ||
+            connection_info.boundary_id=='6' ? 'Virtual Private Gateway' :
+            connection_info.boundary || connection_info.boundary_id=='7' ?
+            'Intra-Region VPC' : connection_info.boundary ||
+            connection_info.boundary_id=='8' ? 'Inter-Region VPC' :
+            connection_info.boundary || connection_info.boundary_id=='9' ?
+            'Local Gateway' : connection_info.boundary ||
+            connection_info.boundary_id=='10' ? 'Gateway VPC' :
+            connection_info.boundary || connection_info.boundary_id=='11' ?
+            'Internet Gateway' : connection_info.boundary "
+          name: connection_info.boundary
+        - disabled: false
+          value: "(session_flags && 0x02000000)==0x0 ? '4' :
+            connection_info.protocol_ver_id || (session_flags &&
+            0x02000000)!==0x0 ? '6' : connection_info.protocol_ver_id"
+          name: connection_info.protocol_ver_id
+        - disabled: false
+          value: "connection_info.protocol_ver_id=='-1' ? 'Other' :
+            connection_info.protocol_ver || connection_info.protocol_ver_id=='0'
+            ? 'Unknown' : connection_info.protocol_ver ||
+            connection_info.protocol_ver_id=='4' ? 'IPv4' :
+            connection_info.protocol_ver || connection_info.protocol_ver_id=='6'
+            ? 'IPv6' : connection_info.protocol_ver"
+          name: connection_info.protocol_ver
+        - disabled: false
+          value: "connection_info.protocol_num=='4' ? 'ICMP' :
+            __e.connection_info.protocol_name ||
+            connection_info.protocol_num=='6' ? 'TCP' :
+            connection_info.protocol_name "
+          name: connection_info.protocol_name
+        - disabled: false
+          value: "sourcetype.startsWith('pan:') ? 'Firewall' : metadata.product.vname"
+          name: metadata.product.name
+        - disabled: false
+          value: "sourcetype.startsWith('pan:') ? 'Palo Alto Networks' :
+            metadata.product.vendor_name"
+          name: metadata.product.vendor_name
+        - disabled: true
+          value: session_flags
+          name: connection_info.tcp_flags
+      remove:
+        - transport
+        - "*__*"
+        - log_*
+    groupId: MklQaW
+    description: calculate fields
+  - id: eval
+    filter: duration==undefined && start_time!=undefined && end_time!=undefined
+    disabled: false
+    conf:
+      add:
+        - name: duration
+          value: " end_time - start_time"
+    description: Calculate duration field if not mapped
+    groupId: u6rXXF
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: activity_id
+          value: "activity_id=='' ? 0 : activity_id"
+        - name: severity_id
+          value: "severity_id=='' ? 0 : severity_id"
+        - disabled: false
+          name: activity_name
+          value: "activity_id=='99' ? 'Other' : activity_name || activity_id=='0' ?
+            'Unknown' : activity_name || activity_id=='1' ? 'Established' :
+            activity_name || activity_id=='2' ? 'Closed' : activity_name ||
+            activity_id=='3' ? 'Reset' : activity_name || activity_id=='4' ?
+            'Failed' : activity_name || activity_id=='5' ? 'Refused' :
+            activity_name || activity_id=='6' ? 'Traffic' : activity_name"
+        - disabled: false
+          name: severity
+          value: "severity_id=='99' ? 'Other' : severity || severity_id=='0' ? 'Unknown' :
+            severity || severity_id=='1' ? 'Informational' : severity ||
+            severity_id=='2' ? 'Low' : severity || severity_id=='3' ? 'Medium' :
+            severity || severity_id=='4' ? 'High' : severity || severity_id=='5'
+            ? 'Critical' : severity || severity_id=='6' ? 'Fatal' : severity"
+        - disabled: false
+          name: status
+          value: "status_id=='99' ? 'Other' : status || status_id=='0' ? 'Unknown' :
+            status || status_id=='1' ? 'Success' : status || status_id=='2' ?
+            'Failure' : status"
+        - name: category_name
+          value: "'Network Activity'"
+        - name: category_uid
+          value: "'4'"
+        - name: class_name
+          value: "'Network Activity'"
+        - name: class_uid
+          value: "'4001'"
+        - name: type_uid
+          value: class_uid * 100 + activity_id
+        - name: type_name
+          value: "class_name + ': ' + activity_name"
+        - name: time
+          value: _time * 1000000
+        - name: raw_data
+          value: _raw
+          disabled: false
+        - name: app_name
+          value: sourcetype
+        - disabled: false
+          name: metadata.version
+          value: "'1.0.0-rc.2'"
+      remove:
+        - _raw
+        - cribl_*
+        - repeat_count
+        - _time
+        - host
+        - index
+        - source*
+        - _*
+        - dvc_*
+        - http*
+        - src_location*
+        - dest_location*
+    description: "Mapping for classification and context fields "
+    groupId: u6rXXF
+  - id: numerify
+    filter: "true"
+    disabled: false
+    conf:
+      format: none
+      filterExpr: C.vars.value != ''
+      ignoreFields:
+        - "!*port"
+        - "!*_id"
+        - "!*sequence"
+        - "!*length"
+        - "!*_num"
+        - "!*alert"
+        - "*endpoint*"
+        - proxy*
+        - observables*
+        - metadata*
+        - tls*
+        - connection_info*
+        - enrichments*
+        - status_code
+      digits: 0
+    description: set the correct fields to numeric for OCSF
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: _tmp
+      fields:
+        - class*
+        - category*
+        - activity*
+        - metadata*
+        - raw_data
+        - severity*
+        - status*
+        - src_endpoint*
+        - dst_endpoint*
+        - connection_info*
+        - time
+        - type*
+    groupId: LFeGCJ
+    description: compile all fields assigned to OCSF schema into one field for validating
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - disabled: false
+          name: _tmp
+          value: JSON.parse(_tmp)
+        - disabled: false
+          name: _schema_validation
+          value: C.Schema('OCSF-4001-network_activity_json_schema_validation.json').validate(_tmp)
+    groupId: LFeGCJ
+    description: run the validation function against the compiled field
+description: "(V1.1) Maps events to the following schema:
+  https://schema.ocsf.io/classes/network_activity?extensions="

@@ -7,5 +7,86 @@ functions:
         - name: WARNING
           value: "'do not send data through the OCSF pack, please read the readme section
             for more info'"
+        - disabled: false
+          name: class_code
+          value: "3002"
       remove: []
+  - id: lookup
+    filter: "true"
+    disabled: null
+    conf:
+      matchMode: regex
+      matchType: all
+      reloadPeriodSec: -1
+      addToEvent: false
+      inFields:
+        - eventField: class_code
+          lookupField: class_code
+      ignoreCase: false
+      file: OCSF-3002.csv
+      outFields:
+        - lookupField: fields
+          eventField: fields
+  - id: code
+    filter: "true"
+    disabled: false
+    conf:
+      maxNumOfIterations: 5000
+      code: |-
+        for (var i = 0; i < __e["fields"].length; i++) {
+            __e[__e["fields"][i]] = "";
+        }
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add: []
+      keep: []
+      remove:
+        - fields
+  - id: numerify
+    filter: "true"
+    disabled: false
+    conf:
+      format: none
+      ignoreFields:
+        - http*
+        - is*
+        - message*
+        - session
+        - severity
+        - status*
+        - time
+      filterExpr: ""
+      digits: .nan
+  - id: serde
+    filter: "true"
+    disabled: true
+    conf:
+      mode: extract
+      type: json
+      srcField: fields
+      cleanFields: false
+      allowedKeyChars: []
+      allowedValueChars: []
+      delimChar: ","
+      quoteChar: '"'
+      escapeChar: \
+      nullValue: "-"
+      iterations: 100
+      overwrite: false
+  - id: json_unroll
+    filter: "true"
+    disabled: true
+    conf:
+      path: fields
+  - id: flatten
+    filter: "true"
+    disabled: true
+    conf:
+      fields:
+        - fields
+      prefix: ""
+      depth: 5
+      delimiter: _
 groups: {}
